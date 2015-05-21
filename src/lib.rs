@@ -34,3 +34,34 @@ pub fn diff(orig: &str, edit: &str) -> (i32, Vec<Difference>) {
     (dist, merge(orig, edit, &common))
 }
 
+/// Generates a visual diffset
+pub fn visual_diff(orig: &str, edit: &str) -> String {
+    let (_, changeset) = diff(orig, edit);
+    let mut ret = String::new();
+
+    for seq in changeset {
+        match seq {
+            Difference::Same(ref x) => {
+                ret.push_str(x);
+            },
+            Difference::Add(ref x) => {
+                ret.push_str("\x1B[92m");
+                ret.push_str(x);
+                ret.push_str("\x1B[0m");
+            },
+            Difference::Rem(ref x) => {
+                ret.push_str("\x1B[91m");
+                ret.push_str(x);
+                ret.push_str("\x1B[0m");
+            }
+        }
+    }
+    println!("{}", ret);
+
+    ret
+}
+
+#[test]
+fn test_visual_diff() {
+    assert_eq!(visual_diff("test", "tost"), "t\x1B[92mo\x1B[0m\x1B[91me\x1B[0mst".to_string());
+}
