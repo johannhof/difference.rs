@@ -1,4 +1,4 @@
 [package]
-name = "diff"
+name = "text-diff"
 version = "0.1.0"
-authors = ["Johann <git@johann-hofmann.com>"]
+authors = ["Johann Hofmann <git@johann-hofmann.com>"]
