@@ -1,7 +1,7 @@
 # text-diff.rs [![](https://travis-ci.org/johannhof/text-diff.rs.svg?branch=master)](https://travis-ci.org/johannhof/text-diff.rs)
 Rust text diffing library
 
-
+![](https://raw.githubusercontent.com/johannhof/text-diff.rs/master/screenshot.png)
 
 ## Application
 
