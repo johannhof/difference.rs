@@ -1,4 +1,7 @@
 [package]
 name = "text-diff"
-version = "0.1.0"
-authors = ["Johann Hofmann <git@johann-hofmann.com>"]
+version = "0.3.0"
+authors = ["Johann Hofmann <mail@johann-hofmann.com>"]
+
+[dependencies]
+getopts = "0.2"
