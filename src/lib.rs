@@ -29,14 +29,14 @@ pub enum Difference {
 /// Calculates the edit distance and the changeset for two given strings
 /// The first string is assumed to be the "original", the second to be an
 /// edited version of the first
-pub fn diff(orig: &str, edit: &str) -> (i32, Vec<Difference>) {
-    let (dist, common) = lcs(orig, edit);
+pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
+    let (dist, common) = lcs(orig, edit, split);
     (dist, merge(orig, edit, &common))
 }
 
-/// Generates a visual diffset
-pub fn visual_diff(orig: &str, edit: &str) -> String {
-    let (_, changeset) = diff(orig, edit);
+/// Prints a colorful visual representation of the diff
+pub fn print_diff(orig: &str, edit: &str, split: &str) {
+    let (_, changeset) = diff(orig, edit, split);
     let mut ret = String::new();
 
     for seq in changeset {
@@ -57,11 +57,5 @@ pub fn visual_diff(orig: &str, edit: &str) -> String {
         }
     }
     println!("{}", ret);
-
-    ret
 }
 
-#[test]
-fn test_visual_diff() {
-    assert_eq!(visual_diff("test", "tost"), "t\x1B[92mo\x1B[0m\x1B[91me\x1B[0mst".to_string());
-}

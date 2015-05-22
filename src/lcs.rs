@@ -1,12 +1,13 @@
 // finds the longest common subsequences
 // outputs the edit distance and a string containing
 // all chars both inputs have in common
-pub fn lcs(orig: &str, edit: &str) -> (i32, String) {
-    let N = orig.len() as i32;
-    let M = edit.len() as i32;
+pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
 
-    let a : Vec<char> = orig.chars().collect();
-    let b : Vec<char> = edit.chars().collect();
+    let a : Vec<&str> = orig.split(split).collect();
+    let b : Vec<&str> = edit.split(split).collect();
+
+    let N = a.len() as i32;
+    let M = b.len() as i32;
 
     let MAX = N + M;
 
@@ -35,7 +36,8 @@ pub fn lcs(orig: &str, edit: &str) -> (i32, String) {
             let mut y = x - k;
 
             while x < N && y < M && a[x as usize] == b[y as usize] {
-                snake.push(a[x as usize]);
+                snake.push_str(a[x as usize]);
+                snake.push_str(split);
                 x += 1;
                 y += 1;
             }
@@ -66,6 +68,7 @@ pub fn lcs(orig: &str, edit: &str) -> (i32, String) {
 
 #[test]
 fn test_lcs() {
-    assert_eq!(lcs("test", "tost"), (2, "tst".to_string()));
-    assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat"), (16, "The quick brown o ps over the lazy ".to_string()));
+    assert_eq!(lcs("test", "tost", ""), (2, "tst".to_string()));
+    assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat", ""), (16, "The quick brown o ps over the lazy ".to_string()));
+    assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat", " "), (6, "The quick brown over the lazy ".to_string()));
 }

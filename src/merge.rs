@@ -29,12 +29,12 @@ pub fn merge (orig: &str, edit: &str, common: &str) -> Vec<Difference> {
             same.clear();
         }
 
-        if add.len() > 0 {
-            ret.push(Difference::Add(add.clone()));
-        }
-
         if rem.len() > 0 {
             ret.push(Difference::Rem(rem.clone()));
+        }
+
+        if add.len() > 0 {
+            ret.push(Difference::Add(add.clone()));
         }
 
         same.push(c);
@@ -68,8 +68,8 @@ pub fn merge (orig: &str, edit: &str, common: &str) -> Vec<Difference> {
 fn test_merge() {
     assert_eq!(merge("testa", "tost", "tst"), vec![
                Difference::Same("t".to_string()),
-               Difference::Add("o".to_string()),
                Difference::Rem("e".to_string()),
+               Difference::Add("o".to_string()),
                Difference::Same("st".to_string()),
                Difference::Rem("a".to_string()),
     ]);
