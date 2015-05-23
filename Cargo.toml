@@ -3,5 +3,9 @@ name = "text-diff"
 version = "0.3.0"
 authors = ["Johann Hofmann <mail@johann-hofmann.com>"]
 
+[[bin]]
+name="text-diff"
+doc=false
+
 [dependencies]
 getopts = "0.2"
