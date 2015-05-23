@@ -1,6 +1,23 @@
 //! Functions to find the difference between to texts (strings).
+//! Usage
+//! ---------- 
+//!
+//! Add the following to your Cargo.toml: 
+//!
+//! ```toml
+//! [dependencies.diff]
+//!
+//! git = "https://github.com/johannhof/text-diff.rs.git"
+//! ```
+//!
+//! Now you can use the crate in your code
+//!
+//! ```
+//! extern crate diff;
+//! ```
 
 #![crate_name = "text_diff"]
+#![doc(html_root_url = "https://johannhof.github.io/text-diff.rs/")]
 
 #![feature(step_by)]
 
