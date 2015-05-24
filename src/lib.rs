@@ -1,11 +1,11 @@
 //! Functions to find the difference between to texts (strings).
 //! Usage
-//! ---------- 
+//! ----------
 //!
-//! Add the following to your Cargo.toml: 
+//! Add the following to your Cargo.toml:
 //!
 //! ```toml
-//! [dependencies.diff]
+//! [dependencies.text_diff]
 //!
 //! git = "https://github.com/johannhof/text-diff.rs.git"
 //! ```
@@ -13,7 +13,7 @@
 //! Now you can use the crate in your code
 //!
 //! ```ignore
-//! extern crate diff;
+//! extern crate text_diff;
 //! ```
 
 #![crate_name = "text_diff"]
@@ -43,15 +43,37 @@ pub enum Difference {
     Rem(String)
 }
 
-/// Calculates the edit distance and the changeset for two given strings
+/// Calculates the edit distance and the changeset for two given strings.
 /// The first string is assumed to be the "original", the second to be an
-/// edited version of the first
+/// edited version of the first. The third parameter specifies how to split
+/// the input strings, leading to a more or less exact comparison.
+///
+/// Common splits are `""` for char-level, `" "` for word-level and `"\n"` for line-level.
+///
+/// Outputs the edit distance (how much the two strings differ) and a "changeset", that is
+/// a `Vec` containing `Difference`s.
+///
+/// # Examples
+///
+/// ```
+///
+/// ```
 pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
     let (dist, common) = lcs(orig, edit, split);
     (dist, merge(orig, edit, &common))
 }
 
-/// Prints a colorful visual representation of the diff
+/// Prints a colorful visual representation of the diff.
+/// This is just a convenience function for those who want quick results.
+///
+/// I recommend checking out the examples on how to build your
+/// own diff output.
+/// # Examples
+///
+/// ```
+/// use text_diff::print_diff;
+/// print_diff("Diffs are awesome", "Diffs are cool", " ");
+/// ```
 pub fn print_diff(orig: &str, edit: &str, split: &str) {
     let (_, changeset) = diff(orig, edit, split);
     let mut ret = String::new();
