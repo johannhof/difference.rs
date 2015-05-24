@@ -56,7 +56,17 @@ pub enum Difference {
 /// # Examples
 ///
 /// ```
+/// use text_diff::diff;
+/// use text_diff::Difference;
 ///
+/// let (dist, changeset) = diff("test", "tent", "");
+///
+/// assert_eq!(changeset, vec![
+///     Difference::Same("te".to_string()),
+///     Difference::Rem("s".to_string()),
+///     Difference::Add("n".to_string()),
+///     Difference::Same("t".to_string())
+/// ]);
 /// ```
 pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
     let (dist, common) = lcs(orig, edit, split);
