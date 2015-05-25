@@ -1,8 +1,10 @@
 // finds the longest common subsequences
 // outputs the edit distance and a string containing
 // all chars both inputs have in common
+#[allow(non_snake_case)]
 pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
 
+    // make list by custom splits
     let a : Vec<&str> = orig.split(split).collect();
     let b : Vec<&str> = edit.split(split).collect();
 
@@ -36,8 +38,11 @@ pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
             let mut y = x - k;
 
             while x < N && y < M && a[x as usize] == b[y as usize] {
+                if snake.len() > 0 {
+                    // add back the splits that were taken away
+                    snake.push_str(split);
+                }
                 snake.push_str(a[x as usize]);
-                snake.push_str(split);
                 x += 1;
                 y += 1;
             }
@@ -50,7 +55,12 @@ pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
             }
 
             if x >= N && y >= M {
+                // add last max_snake
                 if max_snake.len() > 0 {
+                    if common.len() > 0 {
+                        // add back the splits that were taken away
+                        common.push_str(split);
+                    }
                     common.push_str(&max_snake);
                 }
                 return (D, common);
@@ -58,17 +68,29 @@ pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
         }
 
         if max_snake.len() > 0 {
+            if common.len() > 0 {
+                // add back the splits that were taken away
+                common.push_str(split);
+            }
             common.push_str(&max_snake);
         }
 
     }
 
-    unreachable!()
+    // both strings don't match at all
+    (MAX, "".to_string())
 }
 
 #[test]
 fn test_lcs() {
     assert_eq!(lcs("test", "tost", ""), (2, "tst".to_string()));
+    assert_eq!(lcs("test", "test", ""), (0, "test".to_string()));
+
+    assert_eq!(lcs("test", "test", " "), (0, "test".to_string()));
+
     assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat", ""), (16, "The quick brown o ps over the lazy ".to_string()));
-    assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat", " "), (6, "The quick brown over the lazy ".to_string()));
+    assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat", " "), (6, "The quick brown over the lazy".to_string()));
+
+    assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat", "\n"), (2, "".to_string()));
+    assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown fox jumps over the lazy dog", "\n"), (0, "The quick brown fox jumps over the lazy dog".to_string()));
 }
