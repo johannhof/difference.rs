@@ -15,15 +15,23 @@ pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
 
     let mut v : Vec<i32> = (-MAX..MAX).collect();
 
+    // container to hold common subsequence
     let mut common = String::new();
 
     v[1] = 0;
 
+    // iterate over D = "edit steps"
     for D in 0..MAX {
         let mut max = 0;
         let mut max_snake : Box<String> = Box::new("".to_string());
 
-        for k in (-D..D+1).step_by(2) {
+        // TODO replace with
+        // for k in (-D..D+1).step_by(2) {
+        // once it's stable
+
+        let mut k = -D;
+
+        while k < D + 1 {
             let mut snake = String::new();
 
             let mut x;
@@ -65,6 +73,7 @@ pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
                 }
                 return (D, common);
             }
+            k += 2;
         }
 
         if max_snake.len() > 0 {

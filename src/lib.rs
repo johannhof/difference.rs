@@ -19,8 +19,6 @@
 #![crate_name = "text_diff"]
 #![doc(html_root_url = "https://johannhof.github.io/text-diff.rs/")]
 
-#![feature(step_by)]
-
 // I can basically feel the karma already
 #![deny(missing_docs)]
 
