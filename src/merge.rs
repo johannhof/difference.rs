@@ -1,26 +1,32 @@
 use Difference;
 
 // merges the changes from two strings, given a common substring
-pub fn merge (orig: &str, edit: &str, common: &str) -> Vec<Difference> {
+pub fn merge (orig: &str, edit: &str, common: &str, split: &str) -> Vec<Difference> {
     let mut ret = Vec::new();
 
-    let mut a = orig.chars();
-    let mut b = edit.chars();
+    let mut a = orig.split(split);
+    let mut b = edit.split(split);
 
     let mut same = String::new();
-    for c in common.chars() {
+    for c in common.split(split) {
         let mut add = String::new();
         let mut rem = String::new();
 
         let mut x = a.next();
         while x != None && Some(c) != x {
-            rem.push(x.unwrap());
+            if rem.len() > 0 {
+                rem.push_str(split);
+            }
+            rem.push_str(x.unwrap());
             x = a.next();
         }
 
         let mut y = b.next();
         while y != None && Some(c) != y {
-            add.push(y.unwrap());
+            if add.len() > 0 {
+                add.push_str(split);
+            }
+            add.push_str(y.unwrap());
             y = b.next();
         }
 
@@ -37,16 +43,24 @@ pub fn merge (orig: &str, edit: &str, common: &str) -> Vec<Difference> {
             ret.push(Difference::Add(add.clone()));
         }
 
-        same.push(c);
+        if same.len() > 0 {
+            same.push_str(split);
+        }
+        same.push_str(c);
     }
-    ret.push(Difference::Same(same.clone()));
+    if same.len() > 0 {
+        ret.push(Difference::Same(same.clone()));
+    }
 
     // TODO avoid duplication
 
     let mut rem = String::new();
 
     for x in a {
-        rem.push(x);
+        if rem.len() > 0 {
+            rem.push_str(split);
+        }
+        rem.push_str(x);
     }
     if rem.len() > 0 {
         ret.push(Difference::Rem(rem.clone()));
@@ -54,7 +68,10 @@ pub fn merge (orig: &str, edit: &str, common: &str) -> Vec<Difference> {
 
     let mut add = String::new();
     for y in b {
-        add.push(y);
+        if add.len() > 0 {
+            add.push_str(split);
+        }
+        add.push_str(y);
     }
     if add.len() > 0 {
         ret.push(Difference::Add(add.clone()));
@@ -66,7 +83,7 @@ pub fn merge (orig: &str, edit: &str, common: &str) -> Vec<Difference> {
 
 #[test]
 fn test_merge() {
-    assert_eq!(merge("testa", "tost", "tst"), vec![
+    assert_eq!(merge("testa", "tost", "tst", ""), vec![
                Difference::Same("t".to_string()),
                Difference::Rem("e".to_string()),
                Difference::Add("o".to_string()),

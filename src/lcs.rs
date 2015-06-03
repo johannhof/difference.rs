@@ -70,6 +70,8 @@ pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
                         common.push_str(split);
                     }
                     common.push_str(&max_snake);
+                } else {
+                    common.push_str(split);
                 }
                 return (D, common);
             }
@@ -98,7 +100,7 @@ fn test_lcs() {
     assert_eq!(lcs("test", "test", " "), (0, "test".to_string()));
 
     assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat", ""), (16, "The quick brown o ps over the lazy ".to_string()));
-    assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat", " "), (6, "The quick brown over the lazy".to_string()));
+    assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat", " "), (6, "The quick brown over the lazy ".to_string()));
 
     assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat", "\n"), (2, "".to_string()));
     assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown fox jumps over the lazy dog", "\n"), (0, "The quick brown fox jumps over the lazy dog".to_string()));

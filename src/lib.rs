@@ -68,7 +68,7 @@ pub enum Difference {
 /// ```
 pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
     let (dist, common) = lcs(orig, edit, split);
-    (dist, merge(orig, edit, &common))
+    (dist, merge(orig, edit, &common, split))
 }
 
 /// Prints a colorful visual representation of the diff.
@@ -90,19 +90,45 @@ pub fn print_diff(orig: &str, edit: &str, split: &str) {
         match seq {
             Difference::Same(ref x) => {
                 ret.push_str(x);
+                ret.push_str(split);
             },
             Difference::Add(ref x) => {
                 ret.push_str("\x1B[92m");
                 ret.push_str(x);
                 ret.push_str("\x1B[0m");
+                ret.push_str(split);
             },
             Difference::Rem(ref x) => {
                 ret.push_str("\x1B[91m");
                 ret.push_str(x);
                 ret.push_str("\x1B[0m");
+                ret.push_str(split);
             }
         }
     }
     println!("{}", ret);
 }
 
+#[test]
+fn test_diff() {
+    let text1 = "Roses are red, violets are blue,\n\
+                 I wrote this library,\n\
+                 just for you.\n\
+                 (It's true).";
+
+    let text2 = "Roses are red, violets are blue,\n\
+                 I wrote this documentation,\n\
+                 just for you.\n\
+                 (It's quite true).";
+
+    let (dist, changeset) = diff(text1, text2, "\n");
+
+    assert_eq!(changeset, vec![
+         Difference::Same("Roses are red, violets are blue,".to_string()),
+         Difference::Rem("I wrote this library,".to_string()),
+         Difference::Add("I wrote this documentation,".to_string()),
+         Difference::Same("just for you.".to_string()),
+         Difference::Rem("(It's true).".to_string()),
+         Difference::Add("(It's quite true).".to_string())
+    ]);
+}

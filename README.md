@@ -1,7 +1,8 @@
 # text-diff.rs [![](https://travis-ci.org/johannhof/text-diff.rs.svg?branch=master)](https://travis-ci.org/johannhof/text-diff.rs)
 A Rust text diffing library. [Documentation](https://johannhof.github.io/text-diff.rs)
 
-![](https://raw.githubusercontent.com/johannhof/text-diff.rs/master/screenshot.png)
+![](https://raw.githubusercontent.com/johannhof/text-diff.rs/master/assets/fox.png)
+![](https://raw.githubusercontent.com/johannhof/text-diff.rs/master/assets/github-style.png)
 
 Usage
 ----------
@@ -9,7 +10,7 @@ Usage
 Add the following to your Cargo.toml:
 
 ```toml
-[dependencies.diff]
+[dependencies.text_diff]
 
 git = "https://github.com/johannhof/text-diff.rs.git"
 
@@ -17,7 +18,7 @@ git = "https://github.com/johannhof/text-diff.rs.git"
 
 Now you can use the crate in your code
 ```rust
-extern crate diff;
+extern crate text_diff;
 ```
 
 Using the binary
