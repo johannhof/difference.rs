@@ -1,5 +1,9 @@
 # text-diff.rs [![](https://travis-ci.org/johannhof/text-diff.rs.svg?branch=master)](https://travis-ci.org/johannhof/text-diff.rs)
-A Rust text diffing library. [Documentation](https://johannhof.github.io/text-diff.rs)
+A Rust text diffing library. 
+
+__[Documentation](https://johannhof.github.io/text-diff.rs)__
+
+__[Examples](/Examples.md)__
 
 ![](https://raw.githubusercontent.com/johannhof/text-diff.rs/master/assets/fox.png)
 ![](https://raw.githubusercontent.com/johannhof/text-diff.rs/master/assets/github-style.png)
