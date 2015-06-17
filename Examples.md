@@ -1,4 +1,4 @@
-% Diff Examples
+# Diff Examples
 
 These examples use the official term library to format output.
 
