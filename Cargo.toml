@@ -2,6 +2,12 @@
 name = "text-diff"
 version = "0.3.0"
 authors = ["Johann Hofmann <mail@johann-hofmann.com>"]
+description = "A Rust text diffing library."
+repository = "https://github.com/johannhof/text-diff.rs"
+documentation = "https://johannhof.github.io/text-diff.rs/text_diff/index.html"
+readme = "README.md"
+keywords = ["diff", "difference", "changes"]
+license = "MIT"
 
 [[bin]]
 name="text-diff"
