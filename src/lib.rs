@@ -71,6 +71,24 @@ pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
     (dist, merge(orig, edit, &common, split))
 }
 
+/// Assert the difference between two strings. Works like diff, but takes
+/// a fourth parameter that is the expected edit distance (e.g. 0 if you want to
+/// test for equality).
+///
+/// Remember that edit distance might not be equal to your understanding of difference,
+/// for example the words "Rust" and "Dust" have an edit distance of 2 because two changes (a
+/// removal and an addition) are required to make them look the same.
+///
+/// Will print an error with a colorful diff using print_diff in case of failure.
+pub fn assert_diff(orig: &str, edit: &str, split: &str, expected: i32) {
+    let (d, _) = diff(orig, edit, split);
+    if d != expected {
+        print_diff(orig, edit, split);
+        panic!("assertion failed: edit distance between {:?} and {:?} is {} and not {}, see diffset above"
+               , orig, edit, d, expected)
+    }
+}
+
 /// Prints a colorful visual representation of the diff.
 /// This is just a convenience function for those who want quick results.
 ///
@@ -123,6 +141,8 @@ fn test_diff() {
 
     let (dist, changeset) = diff(text1, text2, "\n");
 
+    assert_eq!(dist, 4);
+
     assert_eq!(changeset, vec![
          Difference::Same("Roses are red, violets are blue,".to_string()),
          Difference::Rem("I wrote this library,".to_string()),
@@ -131,4 +151,29 @@ fn test_diff() {
          Difference::Rem("(It's true).".to_string()),
          Difference::Add("(It's quite true).".to_string())
     ]);
+}
+
+#[test]
+#[should_panic]
+fn test_assert_diff_panic() {
+    let text1 = "Roses are red, violets are blue,\n\
+                 I wrote this library,\n\
+                 just for you.\n\
+                 (It's true).";
+
+    let text2 = "Roses are red, violets are blue,\n\
+                 I wrote this documentation,\n\
+                 just for you.\n\
+                 (It's quite true).";
+
+    assert_diff(text1, text2, "\n'", 0);
+}
+
+#[test]
+fn test_assert_diff() {
+    let text1 = "Roses are red, violets are blue";
+
+    let text2 = "Roses are green, violets are blue";
+
+    assert_diff(text1, text2, " ", 2);
 }

@@ -1,12 +1,12 @@
 [package]
 name = "text-diff"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Johann Hofmann <mail@johann-hofmann.com>"]
-description = "A Rust text diffing library."
+description = "A Rust text diffing and assertion library."
 repository = "https://github.com/johannhof/text-diff.rs"
 documentation = "https://johannhof.github.io/text-diff.rs/text_diff/index.html"
 readme = "README.md"
-keywords = ["diff", "difference", "changes"]
+keywords = ["diff", "difference", "changes", "assert"]
 license = "MIT"
 
 [[bin]]

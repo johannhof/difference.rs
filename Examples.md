@@ -109,8 +109,6 @@ fn main() {
   }
   t.reset().unwrap();
   t.flush().unwrap();
-
-  assert!(false);
 }
 ```
 
