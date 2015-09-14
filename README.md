@@ -1,4 +1,4 @@
-# text-diff.rs [![](https://travis-ci.org/johannhof/text-diff.rs.svg?branch=master)](https://travis-ci.org/johannhof/text-diff.rs)
+# text-diff.rs [![](https://travis-ci.org/johannhof/text-diff.rs.svg?branch=master)](https://travis-ci.org/johannhof/text-diff.rs)[![](https://img.shields.io/crates/v/text-diff.svg)](https://crates.io/crates/text-diff)
 A Rust text diffing library. 
 
 __[Documentation](https://johannhof.github.io/text-diff.rs)__
