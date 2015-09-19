@@ -25,15 +25,13 @@ Usage
 Add the following to your Cargo.toml:
 
 ```toml
-[dependencies.text_diff]
-
-git = "https://github.com/johannhof/difference.rs.git"
-
+[dependencies]
+difference = "0.4"
 ```
 
 Now you can use the crate in your code
 ```rust
-extern crate text_diff;
+extern crate difference;
 ```
 
 Using the binary
