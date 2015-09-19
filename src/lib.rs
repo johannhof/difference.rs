@@ -5,19 +5,18 @@
 //! Add the following to your Cargo.toml:
 //!
 //! ```toml
-//! [dependencies.text_diff]
-//!
-//! git = "https://github.com/johannhof/text-diff.rs.git"
+//! [dependencies]
+//! difference = "0.4"
 //! ```
 //!
 //! Now you can use the crate in your code
 //!
 //! ```ignore
-//! extern crate text_diff;
+//! extern crate difference;
 //! ```
 
-#![crate_name = "text_diff"]
-#![doc(html_root_url = "https://johannhof.github.io/text-diff.rs/")]
+#![crate_name = "difference"]
+#![doc(html_root_url = "https://johannhof.github.io/difference.rs/")]
 
 // I can basically feel the karma already
 #![deny(missing_docs)]
@@ -54,8 +53,8 @@ pub enum Difference {
 /// # Examples
 ///
 /// ```
-/// use text_diff::diff;
-/// use text_diff::Difference;
+/// use difference::diff;
+/// use difference::Difference;
 ///
 /// let (dist, changeset) = diff("test", "tent", "");
 ///
@@ -97,7 +96,7 @@ pub fn assert_diff(orig: &str, edit: &str, split: &str, expected: i32) {
 /// # Examples
 ///
 /// ```
-/// use text_diff::print_diff;
+/// use difference::print_diff;
 /// print_diff("Diffs are awesome", "Diffs are cool", " ");
 /// ```
 pub fn print_diff(orig: &str, edit: &str, split: &str) {

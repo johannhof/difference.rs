@@ -4,16 +4,16 @@ These examples use the official term library to format output.
 
 ## Line-by-line (Git Style)
 
-![](https://raw.githubusercontent.com/johannhof/text-diff.rs/master/assets/git-style.png)
+![](https://raw.githubusercontent.com/johannhof/difference.rs/master/assets/git-style.png)
 
 The only thing to do here is to create a diff based on line splits (passing the newline character as a split symbol)
 and iterate over the results, matching and formatting them based on the type of `Difference`.
 
 ```rust
 extern crate term;
-extern crate text_diff;
+extern crate difference;
 use std::io::Write;
-use text_diff::Difference;
+use difference::Difference;
 
 fn main() {
   let text1 = "Roses are red, violets are blue,\n\
@@ -27,7 +27,7 @@ fn main() {
                (It's quite true).";
 
   // compare both texts, the third parameter defines the split level
-  let (_dist, changeset) = text_diff::diff(text1, text2, "\n");
+  let (_dist, changeset) = difference::diff(text1, text2, "\n");
 
   let mut t = term::stdout().unwrap();
 
@@ -56,13 +56,13 @@ fn main() {
 
 ## Underline words (GitHub Style)
 
-![](https://raw.githubusercontent.com/johannhof/text-diff.rs/master/assets/word-underline.png)
+![](https://raw.githubusercontent.com/johannhof/difference.rs/master/assets/word-underline.png)
 
 ```rust
 extern crate term;
-extern crate text_diff;
+extern crate difference;
 use std::io::Write;
-use text_diff::Difference;
+use difference::Difference;
 
 fn main() {
 
@@ -71,7 +71,7 @@ fn main() {
 
   let mut t = term::stdout().unwrap();
 
-  let (_, changes) = text_diff::diff(text1, text2, "");
+  let (_, changes) = difference::diff(text1, text2, "");
 
   for c in changes.iter() {
     match c {
@@ -114,13 +114,13 @@ fn main() {
 
 ## GitHub Style (Multiline)
 
-![](https://raw.githubusercontent.com/johannhof/text-diff.rs/master/assets/github-style.png)
+![](https://raw.githubusercontent.com/johannhof/difference.rs/master/assets/github-style.png)
 
 ```rust
 extern crate term;
-extern crate text_diff;
+extern crate difference;
 use std::io::Write;
-use text_diff::Difference;
+use difference::Difference;
 
 fn main() {
   let text1 = "Roses are red, violets are blue,\n\
@@ -133,7 +133,7 @@ fn main() {
                just for you.\n\
                (It's quite true).";
 
-  let (dist, changeset) = text_diff::diff(text1, text2, "\n");
+  let (dist, changeset) = difference::diff(text1, text2, "\n");
 
   let mut t = term::stdout().unwrap();
 
@@ -148,7 +148,7 @@ fn main() {
                 Difference::Rem(ref y) => {
                   t.fg(term::color::GREEN).unwrap();
                   write!(t, "+");
-                  let (_, changes) = text_diff::diff(y, x, " ");
+                  let (_, changes) = difference::diff(y, x, " ");
                   for c in changes {
                     match c {
                       Difference::Same(ref z) => {

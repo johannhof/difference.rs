@@ -1,4 +1,4 @@
-extern crate text_diff;
+extern crate difference;
 extern crate getopts;
 
 use std::env;
@@ -23,7 +23,7 @@ fn main() {
     };
 
     if matches.free.len() > 1 {
-        text_diff::print_diff(&matches.free[0], &matches.free[1], split);
+        difference::print_diff(&matches.free[0], &matches.free[1], split);
     } else {
         print!("{}", opts.usage(&format!("Usage: {} [options]", program)));
         return;
