@@ -1,6 +1,6 @@
 [package]
 name = "difference"
-version = "0.4.0"
+version = "0.4.1"
 authors = ["Johann Hofmann <mail@johann-hofmann.com>"]
 description = "A Rust text diffing and assertion library."
 repository = "https://github.com/johannhof/difference.rs"
