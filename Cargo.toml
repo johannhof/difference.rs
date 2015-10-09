@@ -15,4 +15,6 @@ doc=false
 
 [dependencies]
 getopts = "0.2"
+
+[dev-dependencies]
 term = "0.2.7"
