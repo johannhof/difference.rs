@@ -10,8 +10,8 @@ keywords = ["diff", "text", "changes", "assert"]
 license = "MIT"
 
 [[bin]]
-name="difference"
-doc=false
+name = "difference"
+doc = false
 
 [dependencies]
 getopts = "0.2"

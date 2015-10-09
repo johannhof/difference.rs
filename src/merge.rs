@@ -1,7 +1,7 @@
 use Difference;
 
 // merges the changes from two strings, given a common substring
-pub fn merge (orig: &str, edit: &str, common: &str, split: &str) -> Vec<Difference> {
+pub fn merge(orig: &str, edit: &str, common: &str, split: &str) -> Vec<Difference> {
     let mut ret = Vec::new();
 
     let mut a = orig.split(split);
@@ -83,7 +83,8 @@ pub fn merge (orig: &str, edit: &str, common: &str, split: &str) -> Vec<Differen
 
 #[test]
 fn test_merge() {
-    assert_eq!(merge("testa", "tost", "tst", ""), vec![
+    assert_eq!(merge("testa", "tost", "tst", ""),
+               vec![
                Difference::Same("t".to_string()),
                Difference::Rem("e".to_string()),
                Difference::Add("o".to_string()),

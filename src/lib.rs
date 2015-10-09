@@ -37,7 +37,7 @@ pub enum Difference {
     /// Sequences that are an addition (don't appear in the first string)
     Add(String),
     /// Sequences that are a removal (don't appear in the second string)
-    Rem(String)
+    Rem(String),
 }
 
 /// Calculates the edit distance and the changeset for two given strings.
@@ -83,8 +83,12 @@ pub fn assert_diff(orig: &str, edit: &str, split: &str, expected: i32) {
     let (d, _) = diff(orig, edit, split);
     if d != expected {
         print_diff(orig, edit, split);
-        panic!("assertion failed: edit distance between {:?} and {:?} is {} and not {}, see diffset above"
-               , orig, edit, d, expected)
+        panic!("assertion failed: edit distance between {:?} and {:?} is {} and not {}, see \
+                diffset above",
+               orig,
+               edit,
+               d,
+               expected)
     }
 }
 
@@ -108,13 +112,13 @@ pub fn print_diff(orig: &str, edit: &str, split: &str) {
             Difference::Same(ref x) => {
                 ret.push_str(x);
                 ret.push_str(split);
-            },
+            }
             Difference::Add(ref x) => {
                 ret.push_str("\x1B[92m");
                 ret.push_str(x);
                 ret.push_str("\x1B[0m");
                 ret.push_str(split);
-            },
+            }
             Difference::Rem(ref x) => {
                 ret.push_str("\x1B[91m");
                 ret.push_str(x);
@@ -142,14 +146,13 @@ fn test_diff() {
 
     assert_eq!(dist, 4);
 
-    assert_eq!(changeset, vec![
-         Difference::Same("Roses are red, violets are blue,".to_string()),
-         Difference::Rem("I wrote this library,".to_string()),
-         Difference::Add("I wrote this documentation,".to_string()),
-         Difference::Same("just for you.".to_string()),
-         Difference::Rem("(It's true).".to_string()),
-         Difference::Add("(It's quite true).".to_string())
-    ]);
+    assert_eq!(changeset,
+               vec![Difference::Same("Roses are red, violets are blue,".to_string()),
+                    Difference::Rem("I wrote this library,".to_string()),
+                    Difference::Add("I wrote this documentation,".to_string()),
+                    Difference::Same("just for you.".to_string()),
+                    Difference::Rem("(It's true).".to_string()),
+                    Difference::Add("(It's quite true).".to_string())]);
 }
 
 #[test]
