@@ -5,15 +5,15 @@
 pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
 
     // make list by custom splits
-    let a : Vec<&str> = orig.split(split).collect();
-    let b : Vec<&str> = edit.split(split).collect();
+    let a: Vec<&str> = orig.split(split).collect();
+    let b: Vec<&str> = edit.split(split).collect();
 
     let N = a.len() as i32;
     let M = b.len() as i32;
 
     let MAX = N + M;
 
-    let mut v : Vec<i32> = (-MAX..MAX).collect();
+    let mut v: Vec<i32> = (-MAX..MAX).collect();
 
     // container to hold common subsequence
     let mut common = String::new();
@@ -23,7 +23,7 @@ pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
     // iterate over D = "edit steps"
     for D in 0..MAX {
         let mut max = 0;
-        let mut max_snake : Box<String> = Box::new("".to_string());
+        let mut max_snake: Box<String> = Box::new("".to_string());
 
         // TODO replace with
         // for k in (-D..D+1).step_by(2) {
@@ -37,9 +37,9 @@ pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
             let mut x;
 
             let index = (MAX + k - 1) as usize;
-            if k == -D || k != D && v[index - 1] < v[index + 1]{
+            if k == -D || k != D && v[index - 1] < v[index + 1] {
                 x = v[index + 1];
-            }else{
+            } else {
                 x = v[index - 1] + 1;
             }
 
@@ -99,9 +99,21 @@ fn test_lcs() {
 
     assert_eq!(lcs("test", "test", " "), (0, "test".to_string()));
 
-    assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat", ""), (16, "The quick brown o ps over the lazy ".to_string()));
-    assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat", " "), (6, "The quick brown over the lazy ".to_string()));
+    assert_eq!(lcs("The quick brown fox jumps over the lazy dog",
+                   "The quick brown dog leaps over the lazy cat",
+                   ""),
+               (16, "The quick brown o ps over the lazy ".to_string()));
+    assert_eq!(lcs("The quick brown fox jumps over the lazy dog",
+                   "The quick brown dog leaps over the lazy cat",
+                   " "),
+               (6, "The quick brown over the lazy ".to_string()));
 
-    assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown dog leaps over the lazy cat", "\n"), (2, "".to_string()));
-    assert_eq!(lcs("The quick brown fox jumps over the lazy dog", "The quick brown fox jumps over the lazy dog", "\n"), (0, "The quick brown fox jumps over the lazy dog".to_string()));
+    assert_eq!(lcs("The quick brown fox jumps over the lazy dog",
+                   "The quick brown dog leaps over the lazy cat",
+                   "\n"),
+               (2, "".to_string()));
+    assert_eq!(lcs("The quick brown fox jumps over the lazy dog",
+                   "The quick brown fox jumps over the lazy dog",
+                   "\n"),
+               (0, "The quick brown fox jumps over the lazy dog".to_string()));
 }
