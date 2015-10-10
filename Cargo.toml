@@ -13,6 +13,10 @@ license = "MIT"
 name = "difference"
 doc = false
 
+[features]
+default = []
+unstable = []
+
 [dependencies]
 getopts = "0.2"
 
