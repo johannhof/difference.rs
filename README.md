@@ -1,4 +1,4 @@
-# difference.rs [![](https://travis-ci.org/johannhof/difference.rs.svg?branch=master)](https://travis-ci.org/johannhof/difference.rs)[![](https://img.shields.io/crates/v/difference.svg)](https://crates.io/crates/difference)
+# difference.rs [![](https://travis-ci.org/johannhof/difference.rs.svg?branch=master)](https://travis-ci.org/johannhof/difference.rs) [![](https://img.shields.io/crates/v/difference.svg)](https://crates.io/crates/difference)
 A Rust text diffing library with built-in diffing assertion.
 
 __[Documentation](https://johannhof.github.io/difference.rs)__
