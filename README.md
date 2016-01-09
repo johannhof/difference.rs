@@ -37,8 +37,8 @@ extern crate difference;
 Using the binary
 -----------------
 
-difference can also be used as a command-line application. The best way to install it is using rustle:
+difference can also be used as a command-line application. The best way to install it is using:
 
-```
-curl -sf https://raw.githubusercontent.com/brson/rustle/master/rustle.sh | sh -s -- https://github.com/johannhof/difference.rs
+```sh
+$ cargo install difference
 ```
