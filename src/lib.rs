@@ -1,4 +1,4 @@
-//! Functions to find the difference between to texts (strings).
+//! Functions to find the difference between two texts (strings).
 //! Usage
 //! ----------
 //!
