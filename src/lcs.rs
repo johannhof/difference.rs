@@ -46,7 +46,7 @@ pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
             let mut y = x - k;
 
             while x < N && y < M && a[x as usize] == b[y as usize] {
-                if snake.len() > 0 {
+                if !snake.is_empty() {
                     // add back the splits that were taken away
                     snake.push_str(split);
                 }
@@ -65,7 +65,7 @@ pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
             if x >= N && y >= M {
                 // add last max_snake
                 if max_snake.len() > 0 {
-                    if common.len() > 0 {
+                    if !common.is_empty() {
                         // add back the splits that were taken away
                         common.push_str(split);
                     }
@@ -79,7 +79,7 @@ pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
         }
 
         if max_snake.len() > 0 {
-            if common.len() > 0 {
+            if !common.is_empty() {
                 // add back the splits that were taken away
                 common.push_str(split);
             }
