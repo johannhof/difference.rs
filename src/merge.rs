@@ -14,7 +14,7 @@ pub fn merge(orig: &str, edit: &str, common: &str, split: &str) -> Vec<Differenc
 
         let mut x = a.next();
         while x != None && Some(c) != x {
-            if rem.len() > 0 {
+            if !rem.is_empty() {
                 rem.push_str(split);
             }
             rem.push_str(x.unwrap());
@@ -23,32 +23,32 @@ pub fn merge(orig: &str, edit: &str, common: &str, split: &str) -> Vec<Differenc
 
         let mut y = b.next();
         while y != None && Some(c) != y {
-            if add.len() > 0 {
+            if !add.is_empty() {
                 add.push_str(split);
             }
             add.push_str(y.unwrap());
             y = b.next();
         }
 
-        if add.len() > 0 || rem.len() > 0 {
+        if !add.is_empty() || !rem.is_empty() {
             ret.push(Difference::Same(same.clone()));
             same.clear();
         }
 
-        if rem.len() > 0 {
+        if !rem.is_empty() {
             ret.push(Difference::Rem(rem.clone()));
         }
 
-        if add.len() > 0 {
+        if !add.is_empty() {
             ret.push(Difference::Add(add.clone()));
         }
 
-        if same.len() > 0 {
+        if !same.is_empty() {
             same.push_str(split);
         }
         same.push_str(c);
     }
-    if same.len() > 0 {
+    if !same.is_empty() {
         ret.push(Difference::Same(same.clone()));
     }
 
@@ -57,23 +57,23 @@ pub fn merge(orig: &str, edit: &str, common: &str, split: &str) -> Vec<Differenc
     let mut rem = String::new();
 
     for x in a {
-        if rem.len() > 0 {
+        if !rem.is_empty() {
             rem.push_str(split);
         }
         rem.push_str(x);
     }
-    if rem.len() > 0 {
+    if !rem.is_empty() {
         ret.push(Difference::Rem(rem.clone()));
     }
 
     let mut add = String::new();
     for y in b {
-        if add.len() > 0 {
+        if !add.is_empty() {
             add.push_str(split);
         }
         add.push_str(y);
     }
-    if add.len() > 0 {
+    if !add.is_empty() {
         ret.push(Difference::Add(add.clone()));
     }
 

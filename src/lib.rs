@@ -2,7 +2,7 @@
 //! Usage
 //! ----------
 //!
-//! Add the following to your Cargo.toml:
+//! Add the following to your `Cargo.toml`:
 //!
 //! ```toml
 //! [dependencies]
@@ -78,7 +78,7 @@ pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
 /// for example the words "Rust" and "Dust" have an edit distance of 2 because two changes (a
 /// removal and an addition) are required to make them look the same.
 ///
-/// Will print an error with a colorful diff using print_diff in case of failure.
+/// Will print an error with a colorful diff using `print_diff` in case of failure.
 pub fn assert_diff(orig: &str, edit: &str, split: &str, expected: i32) {
     let (d, _) = diff(orig, edit, split);
     if d != expected {
