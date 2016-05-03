@@ -74,6 +74,13 @@ pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
 /// a fourth parameter that is the expected edit distance (e.g. 0 if you want to
 /// test for equality).
 ///
+/// To include this macro use:
+/// 
+/// ```
+/// #[macro_use(assert_diff)]
+/// extern crate difference;
+/// ```
+///
 /// Remember that edit distance might not be equal to your understanding of difference,
 /// for example the words "Rust" and "Dust" have an edit distance of 2 because two changes (a
 /// removal and an addition) are required to make them look the same.
