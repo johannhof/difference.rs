@@ -79,6 +79,7 @@ pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
 /// ```
 /// #[macro_use(assert_diff)]
 /// extern crate difference;
+/// # fn main() { }
 /// ```
 ///
 /// Remember that edit distance might not be equal to your understanding of difference,
