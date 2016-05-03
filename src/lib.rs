@@ -74,22 +74,36 @@ pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
 /// a fourth parameter that is the expected edit distance (e.g. 0 if you want to
 /// test for equality).
 ///
+/// To include this macro use:
+/// 
+/// ```
+/// #[macro_use(assert_diff)]
+/// extern crate difference;
+/// # fn main() { }
+/// ```
+///
 /// Remember that edit distance might not be equal to your understanding of difference,
 /// for example the words "Rust" and "Dust" have an edit distance of 2 because two changes (a
 /// removal and an addition) are required to make them look the same.
 ///
 /// Will print an error with a colorful diff using `print_diff` in case of failure.
-pub fn assert_diff(orig: &str, edit: &str, split: &str, expected: i32) {
-    let (d, _) = diff(orig, edit, split);
-    if d != expected {
-        print_diff(orig, edit, split);
-        panic!("assertion failed: edit distance between {:?} and {:?} is {} and not {}, see \
-                diffset above",
-               orig,
-               edit,
-               d,
-               expected)
-    }
+#[macro_export]
+macro_rules! assert_diff {
+    ($orig:expr , $edit:expr, $split: expr, $expected: expr) => ({
+        let orig = $orig;
+        let edit = $edit;
+
+        let (d, _) = $crate::diff(orig, edit, &($split));
+        if d != $expected {
+            $crate::print_diff(orig, edit, &($split));
+            panic!("assertion failed: edit distance between {:?} and {:?} is {} and not {}, see \
+                    diffset above",
+                   orig,
+                   edit,
+                   d,
+                   &($expected))
+        }
+    })
 }
 
 /// Prints a colorful visual representation of the diff.
@@ -168,7 +182,7 @@ fn test_assert_diff_panic() {
                  just for you.\n\
                  (It's quite true).";
 
-    assert_diff(text1, text2, "\n'", 0);
+    assert_diff!(text1, text2, "\n'", 0);
 }
 
 #[test]
@@ -177,5 +191,5 @@ fn test_assert_diff() {
 
     let text2 = "Roses are green, violets are blue";
 
-    assert_diff(text1, text2, " ", 2);
+    assert_diff!(text1, text2, " ", 2);
 }
