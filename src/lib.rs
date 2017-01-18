@@ -23,6 +23,7 @@
 
 mod lcs;
 mod merge;
+mod display;
 
 use lcs::lcs;
 use merge::merge;
@@ -39,6 +40,54 @@ pub enum Difference {
     /// Sequences that are a removal (don't appear in the second string)
     Rem(String),
 }
+
+/// The information about a full changeset
+pub struct Changeset {
+    /// An ordered vector of `Difference` objects, coresponding
+    /// to the differences within the text
+    pub diffs: Vec<Difference>,
+    /// The split used when creating the `Changeset`
+    /// Common splits are `""` for char-level, `" "` for word-level and `"\n"` for line-level.
+    pub split: String,
+    /// The edit distance of the `Changeset`
+    pub distance: i32,
+}
+
+impl Changeset {
+    /// Calculates the edit distance and the changeset for two given strings.
+    /// The first string is assumed to be the "original", the second to be an
+    /// edited version of the first. The third parameter specifies how to split
+    /// the input strings, leading to a more or less exact comparison.
+    ///
+    /// Common splits are `""` for char-level, `" "` for word-level and `"\n"` for line-level.
+    ///
+    /// Outputs the edit distance (how much the two strings differ) and a "changeset", that is
+    /// a `Vec` containing `Difference`s.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use difference::{Changeset, Difference};
+    ///
+    /// let changeset = Changeset::new("test", "tent", "");
+    ///
+    /// assert_eq!(changeset.diffs, vec![
+    ///     Difference::Same("te".to_string()),
+    ///     Difference::Rem("s".to_string()),
+    ///     Difference::Add("n".to_string()),
+    ///     Difference::Same("t".to_string())
+    /// ]);
+    /// ```
+    pub fn new(orig: &str, edit: &str, split: &str) -> Changeset {
+        let (dist, common) = lcs(orig, edit, split);
+        Changeset {
+            diffs: merge(orig, edit, &common, split),
+            split: split.to_string(),
+            distance: dist,
+        }
+    }
+}
+
 
 /// Calculates the edit distance and the changeset for two given strings.
 /// The first string is assumed to be the "original", the second to be an
@@ -66,8 +115,8 @@ pub enum Difference {
 /// ]);
 /// ```
 pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
-    let (dist, common) = lcs(orig, edit, split);
-    (dist, merge(orig, edit, &common, split))
+    let ch = Changeset::new(orig, edit, split);
+    (ch.distance, ch.diffs)
 }
 
 /// Assert the difference between two strings. Works like diff, but takes
@@ -118,30 +167,8 @@ macro_rules! assert_diff {
 /// print_diff("Diffs are awesome", "Diffs are cool", " ");
 /// ```
 pub fn print_diff(orig: &str, edit: &str, split: &str) {
-    let (_, changeset) = diff(orig, edit, split);
-    let mut ret = String::new();
-
-    for seq in changeset {
-        match seq {
-            Difference::Same(ref x) => {
-                ret.push_str(x);
-                ret.push_str(split);
-            }
-            Difference::Add(ref x) => {
-                ret.push_str("\x1B[92m");
-                ret.push_str(x);
-                ret.push_str("\x1B[0m");
-                ret.push_str(split);
-            }
-            Difference::Rem(ref x) => {
-                ret.push_str("\x1B[91m");
-                ret.push_str(x);
-                ret.push_str("\x1B[0m");
-                ret.push_str(split);
-            }
-        }
-    }
-    println!("{}", ret);
+    let ch = Changeset::new(orig, edit, split);
+    println!("{}", ch);
 }
 
 #[test]
