@@ -23,7 +23,8 @@ fn main() {
     };
 
     if matches.free.len() > 1 {
-        difference::print_diff(&matches.free[0], &matches.free[1], split);
+        let ch = difference::Changeset::new(&matches.free[0], &matches.free[1], split);
+        println!("{}", ch);
     } else {
         print!("{}", opts.usage(&format!("Usage: {} [options]", program)));
         return;
