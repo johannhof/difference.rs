@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Changeset` struct in crate `difference`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Changeset">
+
+    <title>difference::Changeset - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>difference</a></p><script>window.sidebarCurrent = {name: 'Changeset', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>difference</a>::<wbr><a class='struct' href=''>Changeset</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-57' class='srclink' href='../src/difference/src/lib.rs.html#45-54' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Changeset {
+    pub diffs: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../difference/enum.Difference.html' title='difference::Difference'>Difference</a>&gt;,
+    pub split: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,
+    pub distance: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>,
+}</pre><div class='docblock'><p>The information about a full changeset</p>
+</div><h2 class='fields'>Fields</h2><span id='structfield.diffs' class='structfield'>
+                           <span id='diffs.v' class='invisible'>
+                           <code>diffs: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='enum' href='../difference/enum.Difference.html' title='difference::Difference'>Difference</a>&gt;</code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>An ordered vector of <code>Difference</code> objects, coresponding
+to the differences within the text</p>
+</div><span id='structfield.split' class='structfield'>
+                           <span id='split.v' class='invisible'>
+                           <code>split: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The split used when creating the <code>Changeset</code>
+Common splits are <code>&quot;&quot;</code> for char-level, <code>&quot; &quot;</code> for word-level and <code>&quot;\n&quot;</code> for line-level.</p>
+</div><span id='structfield.distance' class='structfield'>
+                           <span id='distance.v' class='invisible'>
+                           <code>distance: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The edit distance of the <code>Changeset</code></p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../difference/struct.Changeset.html' title='difference::Changeset'>Changeset</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-61' class='srclink' href='../src/difference/src/lib.rs.html#56-89' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.new' class='method'><span id='new.v' class='invisible'><code>fn <a href='#method.new' class='fnname'>new</a>(orig: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, edit: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, split: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='struct' href='../difference/struct.Changeset.html' title='difference::Changeset'>Changeset</a></code></span></h4>
+<div class='docblock'><p>Calculates the edit distance and the changeset for two given strings.
+The first string is assumed to be the &quot;original&quot;, the second to be an
+edited version of the first. The third parameter specifies how to split
+the input strings, leading to a more or less exact comparison.</p>
+
+<p>Common splits are <code>&quot;&quot;</code> for char-level, <code>&quot; &quot;</code> for word-level and <code>&quot;\n&quot;</code> for line-level.</p>
+
+<p>Outputs the edit distance (how much the two strings differ) and a &quot;changeset&quot;, that is
+a <code>Vec</code> containing <code>Difference</code>s.</p>
+
+<h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>difference</span>::{<span class='ident'>Changeset</span>, <span class='ident'>Difference</span>};
+
+<span class='kw'>let</span> <span class='ident'>changeset</span> <span class='op'>=</span> <span class='ident'>Changeset</span>::<span class='ident'>new</span>(<span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;tent&quot;</span>, <span class='string'>&quot;&quot;</span>);
+
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>changeset</span>.<span class='ident'>diffs</span>, <span class='macro'>vec</span><span class='macro'>!</span>[
+    <span class='ident'>Difference</span>::<span class='ident'>Same</span>(<span class='string'>&quot;te&quot;</span>.<span class='ident'>to_string</span>()),
+    <span class='ident'>Difference</span>::<span class='ident'>Rem</span>(<span class='string'>&quot;s&quot;</span>.<span class='ident'>to_string</span>()),
+    <span class='ident'>Difference</span>::<span class='ident'>Add</span>(<span class='string'>&quot;n&quot;</span>.<span class='ident'>to_string</span>()),
+    <span class='ident'>Difference</span>::<span class='ident'>Same</span>(<span class='string'>&quot;t&quot;</span>.<span class='ident'>to_string</span>())
+]);</pre>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Display.html' title='core::fmt::Display'>Display</a> for <a class='struct' href='../difference/struct.Changeset.html' title='difference::Changeset'>Changeset</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-47' class='srclink' href='../src/difference/src/display.rs.html#6-23' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Display.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "difference";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>
