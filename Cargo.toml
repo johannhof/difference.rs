@@ -6,6 +6,7 @@ description = "A Rust text diffing and assertion library."
 repository = "https://github.com/johannhof/difference.rs"
 documentation = "https://johannhof.github.io/difference.rs/difference/index.html"
 readme = "README.md"
+categories = ["text-processing", "development-tools::testing"]
 keywords = ["diff", "text", "changes", "assert"]
 license = "MIT"
 
