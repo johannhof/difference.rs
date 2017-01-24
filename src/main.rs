@@ -1,8 +1,8 @@
 extern crate difference;
 extern crate getopts;
 
-use std::env;
 use getopts::Options;
+use std::env;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -11,15 +11,15 @@ fn main() {
     let mut opts = Options::new();
     opts.optopt("s", "split", "", "char|word|line");
     let matches = match opts.parse(&args[1..]) {
-        Ok(m) => { m }
-        Err(f) => { panic!(f.to_string()) }
+        Ok(m) => m,
+        Err(f) => panic!(f.to_string()),
     };
 
     let split = match matches.opt_str("s") {
         Some(ref x) if x == "char" => "",
         Some(ref x) if x == "word" => " ",
         Some(ref x) if x == "line" => "\n",
-        _ => " "
+        _ => " ",
     };
 
     if matches.free.len() > 1 {
@@ -32,4 +32,3 @@ fn main() {
 
 
 }
-

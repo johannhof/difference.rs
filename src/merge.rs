@@ -84,11 +84,9 @@ pub fn merge(orig: &str, edit: &str, common: &str, split: &str) -> Vec<Differenc
 #[test]
 fn test_merge() {
     assert_eq!(merge("testa", "tost", "tst", ""),
-               vec![
-               Difference::Same("t".to_string()),
-               Difference::Rem("e".to_string()),
-               Difference::Add("o".to_string()),
-               Difference::Same("st".to_string()),
-               Difference::Rem("a".to_string()),
-    ]);
+               vec![Difference::Same("t".to_string()),
+                    Difference::Rem("e".to_string()),
+                    Difference::Add("o".to_string()),
+                    Difference::Same("st".to_string()),
+                    Difference::Rem("a".to_string())]);
 }

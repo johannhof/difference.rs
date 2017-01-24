@@ -1,4 +1,3 @@
-
 use std::fmt;
 
 use super::{Changeset, Difference};
@@ -24,11 +23,11 @@ impl fmt::Display for Changeset {
 
 #[cfg(test)]
 mod tests {
-    use super::super::{Changeset};
     use std::io::Write;
     use std::iter::FromIterator;
     use std::thread;
     use std::time;
+    use super::super::Changeset;
 
     /// convert slice to vector for assert_eq
     fn vb(b: &'static [u8]) -> Vec<u8> {
@@ -86,8 +85,7 @@ mod tests {
                      I wrote this documentation,\n\
                      just for you.\n\
                      (It's quite true).";
-        let expected = 
-            b"Roses are red, violets are blue,\n\x1b[91mI wrote this library,\x1b\
+        let expected = b"Roses are red, violets are blue,\n\x1b[91mI wrote this library,\x1b\
             [0m\n\x1b[92mI wrote this documentation,\x1b[0m\njust for you.\n\x1b\
             [91m(It's true).\x1b[0m\n\x1b[92m(It's quite true).\x1b[0m\n";
 
