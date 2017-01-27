@@ -1,3 +1,5 @@
+#![deny(warnings)]
+
 extern crate difference;
 extern crate getopts;
 

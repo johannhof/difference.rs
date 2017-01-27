@@ -2,6 +2,7 @@
 // outputs the edit distance and a string containing
 // all chars both inputs have in common
 #[allow(non_snake_case)]
+#[cfg_attr(feature = "cargo-clippy", allow(many_single_char_names))]
 pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
 
     // make list by custom splits

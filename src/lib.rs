@@ -20,6 +20,7 @@
 
 // I can basically feel the karma already
 #![deny(missing_docs)]
+#![deny(warnings)]
 
 mod lcs;
 mod merge;
