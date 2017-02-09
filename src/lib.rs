@@ -10,15 +10,29 @@
 //! ```
 //!
 //! Now you can use the crate in your code
-//!
 //! ```ignore
 //! extern crate difference;
 //! ```
+//!
+//! ## Examples
+//!
+//! See [Examples.md](Examples.md) for more examples.
+//!
+//! ```rust
+//! use difference::{Difference, Changeset};
+//!
+//! let changeset = Changeset::new("test", "tent", "");
+//!
+//! assert_eq!(changeset.diffs, vec![
+//!   Difference::Same("te".to_string()),
+//!   Difference::Rem("s".to_string()),
+//!   Difference::Add("n".to_string()),
+//!   Difference::Same("t".to_string())
+//! ]);
+//! ```
 
 #![crate_name = "difference"]
-#![doc(html_root_url = "https://johannhof.github.io/difference.rs/")]
-
-// I can basically feel the karma already
+#![doc(html_root_url = "http://docs.rs/difference")]
 #![deny(missing_docs)]
 #![deny(warnings)]
 
@@ -89,7 +103,8 @@ impl Changeset {
     }
 }
 
-
+/// **This function is deprecated, please use `Changeset::new` instead**
+///
 /// Calculates the edit distance and the changeset for two given strings.
 /// The first string is assumed to be the "original", the second to be an
 /// edited version of the first. The third parameter specifies how to split
@@ -115,6 +130,7 @@ impl Changeset {
 ///     Difference::Same("t".to_string())
 /// ]);
 /// ```
+#[deprecated(since="1.0.0", note="please use `Changeset::new` instead")]
 pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
     let ch = Changeset::new(orig, edit, split);
     (ch.distance, ch.diffs)
@@ -136,26 +152,28 @@ pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
 /// for example the words "Rust" and "Dust" have an edit distance of 2 because two changes (a
 /// removal and an addition) are required to make them look the same.
 ///
-/// Will print an error with a colorful diff using `print_diff` in case of failure.
+/// Will print an error with a colorful diff in case of failure.
 #[macro_export]
 macro_rules! assert_diff {
     ($orig:expr , $edit:expr, $split: expr, $expected: expr) => ({
         let orig = $orig;
         let edit = $edit;
 
-        let (d, _) = $crate::diff(orig, edit, &($split));
-        if d != $expected {
-            $crate::print_diff(orig, edit, &($split));
+        let changeset = $crate::Changeset::new(orig, edit, &($split));
+        if changeset.distance != $expected {
+            println!("{}", changeset);
             panic!("assertion failed: edit distance between {:?} and {:?} is {} and not {}, see \
                     diffset above",
                    orig,
                    edit,
-                   d,
+                   changeset.distance,
                    &($expected))
         }
     })
 }
 
+/// **This function is deprecated, `Changeset` now implements the `Display` trait instead**
+///
 /// Prints a colorful visual representation of the diff.
 /// This is just a convenience function for those who want quick results.
 ///
@@ -167,6 +185,7 @@ macro_rules! assert_diff {
 /// use difference::print_diff;
 /// print_diff("Diffs are awesome", "Diffs are cool", " ");
 /// ```
+#[deprecated(since="1.0.0", note="`Changeset` now implements the `Display` trait instead")]
 pub fn print_diff(orig: &str, edit: &str, split: &str) {
     let ch = Changeset::new(orig, edit, split);
     println!("{}", ch);
@@ -184,11 +203,11 @@ fn test_diff() {
                  just for you.\n\
                  (It's quite true).";
 
-    let (dist, changeset) = diff(text1, text2, "\n");
+    let changeset = Changeset::new(text1, text2, "\n");
 
-    assert_eq!(dist, 4);
+    assert_eq!(changeset.distance, 4);
 
-    assert_eq!(changeset,
+    assert_eq!(changeset.diffs,
                vec![Difference::Same("Roses are red, violets are blue,".to_string()),
                     Difference::Rem("I wrote this library,".to_string()),
                     Difference::Add("I wrote this documentation,".to_string()),

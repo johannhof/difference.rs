@@ -6,13 +6,15 @@ __[Documentation](https://johannhof.github.io/difference.rs)__
 __[Examples](/Examples.md)__
 
 ```rust
-let (dist, changeset) = diff("test", "tent", "");
+use difference::Changeset;
 
-assert_eq!(changeset, vec![
-    Difference::Same("te".to_string()),
-    Difference::Rem("s".to_string()),
-    Difference::Add("n".to_string()),
-    Difference::Same("t".to_string())
+let changeset = Changeset::new("test", "tent", "");
+
+assert_eq!(changeset.diffs, vec![
+  Difference::Same("te".to_string()),
+  Difference::Rem("s".to_string()),
+  Difference::Add("n".to_string()),
+  Difference::Same("t".to_string())
 ]);
 ```
 
