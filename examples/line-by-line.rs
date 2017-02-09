@@ -14,6 +14,7 @@ use std::io::Write;
  */
 
 #[allow(unused_must_use)]
+#[cfg_attr(feature = "cargo-clippy", allow(needless_range_loop))]
 fn main() {
     let text1 = "Roses are red, violets are blue,\n\
                I wrote this library here,\n\

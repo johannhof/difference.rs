@@ -15,13 +15,13 @@ fn main() {
 
     let Changeset { diffs, .. } = Changeset::new(text1, text2, "");
 
-    for c in diffs.iter() {
-        match c {
-            &Difference::Same(ref z) => {
+    for c in &diffs {
+        match *c {
+            Difference::Same(ref z) => {
                 t.fg(term::color::RED).unwrap();
                 write!(t, "{}", z);
             }
-            &Difference::Rem(ref z) => {
+            Difference::Rem(ref z) => {
                 t.fg(term::color::WHITE).unwrap();
                 t.bg(term::color::RED).unwrap();
                 write!(t, "{}", z);
@@ -34,13 +34,13 @@ fn main() {
 
     writeln!(t, "");
 
-    for c in diffs.iter() {
-        match c {
-            &Difference::Same(ref z) => {
+    for c in &diffs {
+        match *c {
+            Difference::Same(ref z) => {
                 t.fg(term::color::GREEN).unwrap();
                 write!(t, "{}", z);
             }
-            &Difference::Add(ref z) => {
+            Difference::Add(ref z) => {
                 t.fg(term::color::WHITE).unwrap();
                 t.bg(term::color::GREEN).unwrap();
                 write!(t, "{}", z);
