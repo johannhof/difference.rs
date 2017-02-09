@@ -1,6 +1,7 @@
-use std::fmt;
+
 
 use super::{Changeset, Difference};
+use std::fmt;
 
 impl fmt::Display for Changeset {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -23,11 +24,11 @@ impl fmt::Display for Changeset {
 
 #[cfg(test)]
 mod tests {
+    use super::super::Changeset;
     use std::io::Write;
     use std::iter::FromIterator;
     use std::thread;
     use std::time;
-    use super::super::Changeset;
 
     /// convert slice to vector for assert_eq
     fn vb(b: &'static [u8]) -> Vec<u8> {
