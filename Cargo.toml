@@ -7,8 +7,12 @@ repository = "https://github.com/johannhof/difference.rs"
 documentation = "https://johannhof.github.io/difference.rs/difference/index.html"
 readme = "README.md"
 categories = ["text-processing", "development-tools::testing"]
-keywords = ["diff", "text", "changes", "assert"]
+keywords = ["diff", "text", "compare", "changes", "assert"]
 license = "MIT"
+
+[badges]
+travis-ci = { repository = "johannhof/difference.rs" }
+appveyor = { repository = "johannhof/difference.rs" }
 
 [[bin]]
 name = "difference"
