@@ -42,5 +42,5 @@ Using the binary
 difference can also be used as a command-line application. The best way to install it is using:
 
 ```sh
-$ cargo install difference
+$ cargo install --features=bin
 ```

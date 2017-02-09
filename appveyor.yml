@@ -32,7 +32,7 @@ install:
 
 # Build and test
 test_script:
-  - cargo build --verbose
+  - cargo build --features=bin
   - cargo test
 
 cache:

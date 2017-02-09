@@ -1,11 +1,20 @@
 #![deny(warnings)]
 
 extern crate difference;
+#[cfg(feature = "bin")]
 extern crate getopts;
 
+#[cfg(feature = "bin")]
 use getopts::Options;
+#[cfg(feature = "bin")]
 use std::env;
 
+#[cfg(not(feature = "bin"))]
+fn main() {
+    panic!("Needs to be compiled with --features=bin");
+}
+
+#[cfg(feature = "bin")]
 fn main() {
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();

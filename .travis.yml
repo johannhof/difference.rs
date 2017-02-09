@@ -13,7 +13,7 @@ install:
   - export PATH=$HOME/.cargo/bin:$PATH
 
 script:
-  - cargo build
+  - cargo build --features=bin
   - cargo test
   - if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then (cargo clippy) fi
   - cargo fmt -- --write-mode=diff

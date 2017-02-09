@@ -16,10 +16,10 @@ doc = false
 
 [features]
 default = []
-unstable = []
+bin = ["getopts"]
 
 [dependencies]
-getopts = "0.2"
+getopts = {version = "0.2", optional = true}
 
 [dev-dependencies]
 term = "0.2.7"
