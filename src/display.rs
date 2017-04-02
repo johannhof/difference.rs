@@ -11,10 +11,18 @@ impl fmt::Display for Changeset {
                     try!(write!(f, "{}{}", x, self.split));
                 }
                 Difference::Add(ref x) => {
-                    try!(write!(f, "\x1b[92m{}\x1b[0m{}", x, self.split));
+                    if self.word_diff {
+                        try!(write!(f, "[-{}-]{}", x, self.split));
+                    } else {
+                        try!(write!(f, "\x1b[92m{}\x1b[0m{}", x, self.split));
+                    }
                 }
                 Difference::Rem(ref x) => {
-                    try!(write!(f, "\x1b[91m{}\x1b[0m{}", x, self.split));
+                    if self.word_diff {
+                        try!(write!(f, "[+{}+]{}", x, self.split));
+                    } else {
+                        try!(write!(f, "\x1b[91m{}\x1b[0m{}", x, self.split));
+                    }
                 }
             }
         }

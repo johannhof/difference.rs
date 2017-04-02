@@ -56,6 +56,23 @@ pub enum Difference {
     Rem(String),
 }
 
+/// Struct to hold additional information about producing diff
+pub struct ChangesetOptions {
+    /// Display output of diff using words instead of colors
+    /// # Example
+    /// [-g-][+f+]oo
+    pub word_diff: bool
+}
+
+impl ChangesetOptions {
+    /// Returns a new ChangesetOptions with parameters
+    pub fn new(word_diff: bool) -> ChangesetOptions {
+        ChangesetOptions {
+            word_diff: word_diff
+        }
+    }
+}
+
 /// The information about a full changeset
 pub struct Changeset {
     /// An ordered vector of `Difference` objects, coresponding
@@ -66,6 +83,8 @@ pub struct Changeset {
     pub split: String,
     /// The edit distance of the `Changeset`
     pub distance: i32,
+    /// Determines useage of words instead of color for diffs
+    pub word_diff: bool
 }
 
 impl Changeset {
@@ -99,6 +118,45 @@ impl Changeset {
             diffs: merge(orig, edit, &common, split),
             split: split.to_string(),
             distance: dist,
+            word_diff: false
+        }
+    }
+
+    /// Calculates the edit distance and the changeset for two given strings.
+    /// The first string is assumed to be the "original", the second to be an
+    /// edited version of the first. The third parameter specifies how to split
+    /// the input strings, leading to a more or less exact comparison.
+    ///
+    /// Common splits are `""` for char-level, `" "` for word-level and `"\n"` for line-level.
+    ///
+    /// Outputs the edit distance (how much the two strings differ) and a "changeset", that is
+    /// a `Vec` containing `Difference`s.
+    /// 
+    /// This function allows a ChangesetOptions struct to be passed - tuning how the diffs are
+    /// produced & displayed
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use difference::{Changeset, ChangesetOptions, Difference};
+    /// 
+    /// let changeset_options = ChangesetOptions::new(true);
+    /// let changeset = Changeset::new_with_options("test", "tent", "", changeset_options);
+    ///
+    /// assert_eq!(changeset.diffs, vec![
+    ///     Difference::Same("te".to_string()),
+    ///     Difference::Rem("s".to_string()),
+    ///     Difference::Add("n".to_string()),
+    ///     Difference::Same("t".to_string())
+    /// ]);
+    /// ```
+    pub fn new_with_options(orig: &str, edit: &str, split: &str, options: ChangesetOptions) -> Changeset {
+        let (dist, common) = lcs(orig, edit, split);
+        Changeset {
+            diffs: merge(orig, edit, &common, split),
+            split: split.to_string(),
+            distance: dist,
+            word_diff: options.word_diff
         }
     }
 }
