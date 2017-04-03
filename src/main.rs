@@ -33,9 +33,10 @@ fn main() {
         _ => " ",
     };
 
+    let changeset_options = difference::ChangesetOptions::new(false);
+
     if matches.free.len() > 1 {
-        let ch = difference::Changeset::new(&matches.free[0], &matches.free[1], split);
-        println!("{}", ch);
+        difference::print_diff(&matches.free[0], &matches.free[1], split, changeset_options).unwrap();
     } else {
         print!("{}", opts.usage(&format!("Usage: {} [options]", program)));
         return;

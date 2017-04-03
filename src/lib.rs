@@ -36,12 +36,15 @@
 #![deny(missing_docs)]
 #![deny(warnings)]
 
+extern crate term;
+
 mod lcs;
 mod merge;
 mod display;
 
 use lcs::lcs;
 use merge::merge;
+use std::io::prelude::*;
 
 /// Defines the contents of a changeset
 /// Changesets will be delivered in order of appearance in the original string
@@ -230,10 +233,11 @@ macro_rules! assert_diff {
     })
 }
 
-/// **This function is deprecated, `Changeset` now implements the `Display` trait instead**
-///
-/// Prints a colorful visual representation of the diff.
-/// This is just a convenience function for those who want quick results.
+/// Prints a colorful visual representation of the diff to standard out.
+/// This is a convenience function for printing colored diff results.
+/// 
+/// The difference between this & the display impl is this uses the Term crate for colors,
+/// allowing colors to appear in windows terminals
 ///
 /// I recommend checking out the examples on how to build your
 /// own diff output.
@@ -241,12 +245,41 @@ macro_rules! assert_diff {
 ///
 /// ```
 /// use difference::print_diff;
-/// print_diff("Diffs are awesome", "Diffs are cool", " ");
+/// 
+/// let changeset_options = difference::ChangesetOptions::new(false);
+/// print_diff("Diffs are awesome", "Diffs are cool", " ", changeset_options);
 /// ```
-#[deprecated(since="1.0.0", note="`Changeset` now implements the `Display` trait instead")]
-pub fn print_diff(orig: &str, edit: &str, split: &str) {
-    let ch = Changeset::new(orig, edit, split);
-    println!("{}", ch);
+pub fn print_diff(orig: &str, edit: &str, split: &str, options: ChangesetOptions) -> Result<(), std::io::Error> {
+    let ch = Changeset::new_with_options(orig, edit, split, options);
+    let mut t = term::stdout().unwrap();
+
+    for d in &ch.diffs {
+        t.reset().unwrap();
+        if ch.word_diff {
+            match *d {
+                Difference::Same(ref x) => try!(write!(t, "{}{}", x, ch.split)),
+                Difference::Add(ref x) => try!(write!(t, "[-{}-]{}", x, ch.split)),
+                Difference::Rem(ref x) => try!(write!(t, "[+{}+]{}", x, ch.split)),
+            };
+        } else {
+            match *d {
+                Difference::Same(ref x) => {
+                    try!(write!(t, "{}{}", x, ch.split));
+                },
+                Difference::Add(ref x) => {
+                    t.fg(term::color::GREEN).unwrap();
+                    try!(write!(t, "{}{}", x, ch.split));
+                },
+                Difference::Rem(ref x) => {
+                    t.fg(term::color::RED).unwrap();
+                    try!(write!(t, "{}{}", x, ch.split));
+                }
+            };
+        }
+    }
+    t.reset().unwrap();
+    try!(writeln!(t, "")); // W/o this - terminals will print '%'
+    Ok(())
 }
 
 #[test]
