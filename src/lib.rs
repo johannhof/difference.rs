@@ -278,7 +278,10 @@ pub fn print_diff(orig: &str, edit: &str, split: &str, options: ChangesetOptions
         }
     }
     t.reset().unwrap();
-    try!(writeln!(t, "")); // W/o this - terminals will print '%'
+    if !split.contains("\n") {
+        // Include trailing line break if split doesn't include one
+        try!(writeln!(t, ""));
+    }
     Ok(())
 }
 

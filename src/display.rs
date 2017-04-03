@@ -33,6 +33,7 @@ impl fmt::Display for Changeset {
 #[cfg(test)]
 mod tests {
     use super::super::Changeset;
+    use super::super::ChangesetOptions;
     use std::io::Write;
     use std::iter::FromIterator;
     use std::thread;
@@ -104,5 +105,28 @@ mod tests {
         debug_bytes(&result, expected);
         assert_eq!(result, vb(expected));
 
+    }
+
+    #[test]
+    fn test_display_with_word_diff() {
+        let text1 = "Roses are red, violets are blue,\n\
+                     I wrote this library,\n\
+                     just for you.\n\
+                     (It's true).";
+
+        let text2 = "Roses are red, violets are blue,\n\
+                     I wrote this documentation,\n\
+                     just for you.\n\
+                     (It's quite true).";
+        let expected = b"Roses are red, violets are blue,\n[-I wrote this library,-]\
+            \n[+I wrote this documentation,+]\njust for you.\n[-\
+            (It's true).-]\n[+(It's quite true).+]\n";
+
+        let ch_options = ChangesetOptions::new(true);
+        let ch = Changeset::new_with_options(text1, text2, "\n", ch_options);
+        let mut result: Vec<u8> = Vec::new();
+        write!(result, "{}", ch).unwrap();
+        debug_bytes(&result, expected);
+        assert_eq!(result, vb(expected));
     }
 }

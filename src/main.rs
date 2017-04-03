@@ -21,6 +21,7 @@ fn main() {
 
     let mut opts = Options::new();
     opts.optopt("s", "split", "", "char|word|line");
+    opts.optflag("", "word-diff", "Enable word diffs instead of colored diffs");
     let matches = match opts.parse(&args[1..]) {
         Ok(m) => m,
         Err(f) => panic!(f.to_string()),
@@ -33,7 +34,7 @@ fn main() {
         _ => " ",
     };
 
-    let changeset_options = difference::ChangesetOptions::new(false);
+    let changeset_options = difference::ChangesetOptions::new(matches.opt_present("word-diff"));
 
     if matches.free.len() > 1 {
         difference::print_diff(&matches.free[0], &matches.free[1], split, changeset_options).unwrap();
