@@ -64,15 +64,13 @@ pub struct ChangesetOptions {
     /// Display output of diff using words instead of colors
     /// # Example
     /// [-g-][+f+]oo
-    pub word_diff: bool
+    pub word_diff: bool,
 }
 
 impl ChangesetOptions {
     /// Returns a new ChangesetOptions with parameters
     pub fn new(word_diff: bool) -> ChangesetOptions {
-        ChangesetOptions {
-            word_diff: word_diff
-        }
+        ChangesetOptions { word_diff: word_diff }
     }
 }
 
@@ -87,7 +85,7 @@ pub struct Changeset {
     /// The edit distance of the `Changeset`
     pub distance: i32,
     /// Determines useage of words instead of color for diffs
-    pub word_diff: bool
+    pub word_diff: bool,
 }
 
 impl Changeset {
@@ -121,7 +119,7 @@ impl Changeset {
             diffs: merge(orig, edit, &common, split),
             split: split.to_string(),
             distance: dist,
-            word_diff: false
+            word_diff: false,
         }
     }
 
@@ -134,7 +132,7 @@ impl Changeset {
     ///
     /// Outputs the edit distance (how much the two strings differ) and a "changeset", that is
     /// a `Vec` containing `Difference`s.
-    /// 
+    ///
     /// This function allows a ChangesetOptions struct to be passed - tuning how the diffs are
     /// produced & displayed
     ///
@@ -142,7 +140,7 @@ impl Changeset {
     ///
     /// ```
     /// use difference::{Changeset, ChangesetOptions, Difference};
-    /// 
+    ///
     /// let changeset_options = ChangesetOptions::new(true);
     /// let changeset = Changeset::new_with_options("test", "tent", "", changeset_options);
     ///
@@ -153,13 +151,17 @@ impl Changeset {
     ///     Difference::Same("t".to_string())
     /// ]);
     /// ```
-    pub fn new_with_options(orig: &str, edit: &str, split: &str, options: ChangesetOptions) -> Changeset {
+    pub fn new_with_options(orig: &str,
+                            edit: &str,
+                            split: &str,
+                            options: ChangesetOptions)
+                            -> Changeset {
         let (dist, common) = lcs(orig, edit, split);
         Changeset {
             diffs: merge(orig, edit, &common, split),
             split: split.to_string(),
             distance: dist,
-            word_diff: options.word_diff
+            word_diff: options.word_diff,
         }
     }
 }
@@ -235,7 +237,7 @@ macro_rules! assert_diff {
 
 /// Prints a colorful visual representation of the diff to standard out.
 /// This is a convenience function for printing colored diff results.
-/// 
+///
 /// The difference between this & the display impl is this uses the Term crate for colors,
 /// allowing colors to appear in windows terminals
 ///
@@ -245,11 +247,15 @@ macro_rules! assert_diff {
 ///
 /// ```
 /// use difference::print_diff;
-/// 
+///
 /// let changeset_options = difference::ChangesetOptions::new(false);
 /// print_diff("Diffs are awesome", "Diffs are cool", " ", changeset_options);
 /// ```
-pub fn print_diff(orig: &str, edit: &str, split: &str, options: ChangesetOptions) -> Result<(), std::io::Error> {
+pub fn print_diff(orig: &str,
+                  edit: &str,
+                  split: &str,
+                  options: ChangesetOptions)
+                  -> Result<(), std::io::Error> {
     let ch = Changeset::new_with_options(orig, edit, split, options);
     let mut t = term::stdout().unwrap();
 
@@ -265,11 +271,11 @@ pub fn print_diff(orig: &str, edit: &str, split: &str, options: ChangesetOptions
             match *d {
                 Difference::Same(ref x) => {
                     try!(write!(t, "{}{}", x, ch.split));
-                },
+                }
                 Difference::Add(ref x) => {
                     t.fg(term::color::GREEN).unwrap();
                     try!(write!(t, "{}{}", x, ch.split));
-                },
+                }
                 Difference::Rem(ref x) => {
                     t.fg(term::color::RED).unwrap();
                     try!(write!(t, "{}{}", x, ch.split));
