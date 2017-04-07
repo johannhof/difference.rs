@@ -3,15 +3,14 @@ extern crate difference;
 use difference::{Difference, Changeset};
 use std::io::Write;
 
-/*
- * The only thing to do here is to create a diff based on line
- * splits (passing the newline character as a split symbol)
- * and iterate over the results, matching and formatting them based
- * on the type of `Difference`.
- *
- * Screenshot:
- * https://raw.githubusercontent.com/johannhof/difference.rs/master/assets/git-style.png
- */
+// The only thing to do here is to create a diff based on line
+// splits (passing the newline character as a split symbol)
+// and iterate over the results, matching and formatting them based
+// on the type of `Difference`.
+//
+// Screenshot:
+// https://raw.githubusercontent.com/johannhof/difference.rs/master/assets/git-style.png
+//
 
 #[allow(unused_must_use)]
 #[cfg_attr(feature = "cargo-clippy", allow(needless_range_loop))]

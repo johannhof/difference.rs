@@ -36,12 +36,15 @@
 #![deny(missing_docs)]
 #![deny(warnings)]
 
+extern crate term;
+
 mod lcs;
 mod merge;
 mod display;
 
 use lcs::lcs;
 use merge::merge;
+use std::io::prelude::*;
 
 /// Defines the contents of a changeset
 /// Changesets will be delivered in order of appearance in the original string
@@ -56,6 +59,21 @@ pub enum Difference {
     Rem(String),
 }
 
+/// Struct to hold additional information about producing diff
+pub struct ChangesetOptions {
+    /// Display output of diff using words instead of colors
+    /// # Example
+    /// [-g-][+f+]oo
+    pub word_diff: bool,
+}
+
+impl ChangesetOptions {
+    /// Returns a new ChangesetOptions with parameters
+    pub fn new(word_diff: bool) -> ChangesetOptions {
+        ChangesetOptions { word_diff: word_diff }
+    }
+}
+
 /// The information about a full changeset
 pub struct Changeset {
     /// An ordered vector of `Difference` objects, coresponding
@@ -66,6 +84,8 @@ pub struct Changeset {
     pub split: String,
     /// The edit distance of the `Changeset`
     pub distance: i32,
+    /// Determines useage of words instead of color for diffs
+    pub word_diff: bool,
 }
 
 impl Changeset {
@@ -99,6 +119,49 @@ impl Changeset {
             diffs: merge(orig, edit, &common, split),
             split: split.to_string(),
             distance: dist,
+            word_diff: false,
+        }
+    }
+
+    /// Calculates the edit distance and the changeset for two given strings.
+    /// The first string is assumed to be the "original", the second to be an
+    /// edited version of the first. The third parameter specifies how to split
+    /// the input strings, leading to a more or less exact comparison.
+    ///
+    /// Common splits are `""` for char-level, `" "` for word-level and `"\n"` for line-level.
+    ///
+    /// Outputs the edit distance (how much the two strings differ) and a "changeset", that is
+    /// a `Vec` containing `Difference`s.
+    ///
+    /// This function allows a ChangesetOptions struct to be passed - tuning how the diffs are
+    /// produced & displayed
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use difference::{Changeset, ChangesetOptions, Difference};
+    ///
+    /// let changeset_options = ChangesetOptions::new(true);
+    /// let changeset = Changeset::new_with_options("test", "tent", "", changeset_options);
+    ///
+    /// assert_eq!(changeset.diffs, vec![
+    ///     Difference::Same("te".to_string()),
+    ///     Difference::Rem("s".to_string()),
+    ///     Difference::Add("n".to_string()),
+    ///     Difference::Same("t".to_string())
+    /// ]);
+    /// ```
+    pub fn new_with_options(orig: &str,
+                            edit: &str,
+                            split: &str,
+                            options: ChangesetOptions)
+                            -> Changeset {
+        let (dist, common) = lcs(orig, edit, split);
+        Changeset {
+            diffs: merge(orig, edit, &common, split),
+            split: split.to_string(),
+            distance: dist,
+            word_diff: options.word_diff,
         }
     }
 }
@@ -172,10 +235,11 @@ macro_rules! assert_diff {
     })
 }
 
-/// **This function is deprecated, `Changeset` now implements the `Display` trait instead**
+/// Prints a colorful visual representation of the diff to standard out.
+/// This is a convenience function for printing colored diff results.
 ///
-/// Prints a colorful visual representation of the diff.
-/// This is just a convenience function for those who want quick results.
+/// The difference between this & the display impl is this uses the Term crate for colors,
+/// allowing colors to appear in windows terminals
 ///
 /// I recommend checking out the examples on how to build your
 /// own diff output.
@@ -183,12 +247,48 @@ macro_rules! assert_diff {
 ///
 /// ```
 /// use difference::print_diff;
-/// print_diff("Diffs are awesome", "Diffs are cool", " ");
+///
+/// let changeset_options = difference::ChangesetOptions::new(false);
+/// print_diff("Diffs are awesome", "Diffs are cool", " ", changeset_options);
 /// ```
-#[deprecated(since="1.0.0", note="`Changeset` now implements the `Display` trait instead")]
-pub fn print_diff(orig: &str, edit: &str, split: &str) {
-    let ch = Changeset::new(orig, edit, split);
-    println!("{}", ch);
+pub fn print_diff(orig: &str,
+                  edit: &str,
+                  split: &str,
+                  options: ChangesetOptions)
+                  -> Result<(), std::io::Error> {
+    let ch = Changeset::new_with_options(orig, edit, split, options);
+    let mut t = term::stdout().unwrap();
+
+    for d in &ch.diffs {
+        t.reset().unwrap();
+        if ch.word_diff {
+            match *d {
+                Difference::Same(ref x) => try!(write!(t, "{}{}", x, ch.split)),
+                Difference::Add(ref x) => try!(write!(t, "[-{}-]{}", x, ch.split)),
+                Difference::Rem(ref x) => try!(write!(t, "[+{}+]{}", x, ch.split)),
+            };
+        } else {
+            match *d {
+                Difference::Same(ref x) => {
+                    try!(write!(t, "{}{}", x, ch.split));
+                }
+                Difference::Add(ref x) => {
+                    t.fg(term::color::GREEN).unwrap();
+                    try!(write!(t, "{}{}", x, ch.split));
+                }
+                Difference::Rem(ref x) => {
+                    t.fg(term::color::RED).unwrap();
+                    try!(write!(t, "{}{}", x, ch.split));
+                }
+            };
+        }
+    }
+    t.reset().unwrap();
+    if !split.contains("\n") {
+        // Include trailing line break if split doesn't include one
+        try!(writeln!(t, ""));
+    }
+    Ok(())
 }
 
 #[test]

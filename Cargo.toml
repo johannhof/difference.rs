@@ -24,6 +24,6 @@ bin = ["getopts"]
 
 [dependencies]
 getopts = {version = "0.2", optional = true}
+term = "0.2.7"
 
 [dev-dependencies]
-term = "0.2.7"
