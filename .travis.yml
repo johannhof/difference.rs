@@ -8,7 +8,9 @@ rust:
 
 install:
   # Install rustfmt
-  - curl -LSfs https://japaric.github.io/trust/install.sh | sh -s -- --force --crate rustfmt --git japaric/rustfmt-bin --tag v0.9.0-20170614
+  # There are no linux binaries for rustfmt-bin available right now. See https://github.com/japaric/rustfmt-bin/issues/2.
+  #- curl -LSfs https://japaric.github.io/trust/install.sh | sh -s -- --force --crate rustfmt --git japaric/rustfmt-bin --tag v0.9.0-20170614
+  - if [ "$TRAVIS_RUST_VERSION" = "stable" ]; then (cargo install rustfmt --vers 0.9.0 --force) fi
   # Install clippy
   - if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then (cargo install clippy --force) fi
   - export PATH=$HOME/.cargo/bin:$PATH
@@ -17,7 +19,7 @@ script:
   - cargo build --features=bin
   - cargo test
   - if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then (cargo clippy) fi
-  - cargo fmt -- --write-mode=diff
+  - if [ "$TRAVIS_RUST_VERSION" = "stable" ]; then (cargo fmt -- --write-mode=diff) fi
 
 addons:
   apt:
