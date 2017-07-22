@@ -130,7 +130,7 @@ impl Changeset {
 ///     Difference::Same("t".to_string())
 /// ]);
 /// ```
-#[deprecated(since="1.0.0", note="please use `Changeset::new` instead")]
+#[deprecated(since = "1.0.0", note = "please use `Changeset::new` instead")]
 pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
     let ch = Changeset::new(orig, edit, split);
     (ch.distance, ch.diffs)
@@ -185,7 +185,7 @@ macro_rules! assert_diff {
 /// use difference::print_diff;
 /// print_diff("Diffs are awesome", "Diffs are cool", " ");
 /// ```
-#[deprecated(since="1.0.0", note="`Changeset` now implements the `Display` trait instead")]
+#[deprecated(since = "1.0.0", note = "`Changeset` now implements the `Display` trait instead")]
 pub fn print_diff(orig: &str, edit: &str, split: &str) {
     let ch = Changeset::new(orig, edit, split);
     println!("{}", ch);
@@ -207,13 +207,17 @@ fn test_diff() {
 
     assert_eq!(changeset.distance, 4);
 
-    assert_eq!(changeset.diffs,
-               vec![Difference::Same("Roses are red, violets are blue,".to_string()),
-                    Difference::Rem("I wrote this library,".to_string()),
-                    Difference::Add("I wrote this documentation,".to_string()),
-                    Difference::Same("just for you.".to_string()),
-                    Difference::Rem("(It's true).".to_string()),
-                    Difference::Add("(It's quite true).".to_string())]);
+    assert_eq!(
+        changeset.diffs,
+        vec![
+            Difference::Same("Roses are red, violets are blue,".to_string()),
+            Difference::Rem("I wrote this library,".to_string()),
+            Difference::Add("I wrote this documentation,".to_string()),
+            Difference::Same("just for you.".to_string()),
+            Difference::Rem("(It's true).".to_string()),
+            Difference::Add("(It's quite true).".to_string()),
+        ]
+    );
 }
 
 #[test]
