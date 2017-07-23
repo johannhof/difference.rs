@@ -15,14 +15,21 @@ struct Check<'a> {
 
 impl<'a> fmt::Display for Check<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Changeset::new({:?}, {:?}, {:?}) -> [",
+        write!(
+            f,
+            "Changeset::new({:?}, {:?}, {:?}) -> [",
             self.old,
             self.new,
-            self.changeset.split)?;
+            self.changeset.split
+        )?;
 
         let mut iter = self.changeset.diffs.iter();
-        if let Some(d) = iter.next() { write!(f, "{:?}", d)?; }
-        for d in iter { write!(f, " {:?}", d)?; }
+        if let Some(d) = iter.next() {
+            write!(f, "{:?}", d)?;
+        }
+        for d in iter {
+            write!(f, " {:?}", d)?;
+        }
         write!(f, "]")
     }
 }
@@ -78,12 +85,18 @@ impl<'a> Check<'a> {
             }
         }
         if !old.is_empty() {
-            return TestResult::error(format!("expected end of string in `old` at {:?} for {}",
-                                              old, self))
+            return TestResult::error(format!(
+                "expected end of string in `old` at {:?} for {}",
+                old,
+                self
+            ));
         }
         if !new.is_empty() {
-            return TestResult::error(format!("expected end of string in `new` at {:?} for {}",
-                                              new, self))
+            return TestResult::error(format!(
+                "expected end of string in `new` at {:?} for {}",
+                new,
+                self
+            ));
         }
         TestResult::passed()
     }
@@ -99,9 +112,7 @@ fn simple() {
 fn issue_19() {
     // this should work but it doesn't
     // https://github.com/johannhof/difference.rs/issues/19
-    quickcheck(check_changeset("a b : g",
-                               "b a : b b : g g",
-                               " "));
+    quickcheck(check_changeset("a b : g", "b a : b b : g g", " "));
 }
 
 #[test]
@@ -109,19 +120,20 @@ fn issue_19() {
 fn fuzzy() {
     fn prop(old: Vec<usize>, new: Vec<usize>, words: Vec<char>) -> TestResult {
         if words.is_empty() {
-            return TestResult::discard()
+            return TestResult::discard();
         }
 
         fn map_to_words(input: &[usize], words: &[char]) -> String {
-            input.iter()
-                .enumerate()
-                .fold(String::new(), |mut acc, (i, x)| {
+            input.iter().enumerate().fold(
+                String::new(),
+                |mut acc, (i, x)| {
                     if i > 0 {
                         acc.push(' ');
                     }
                     acc.push(words[x % words.len()]);
                     acc
-                })
+                },
+            )
         }
         let old = map_to_words(&old, &words);
         let new = map_to_words(&new, &words);
