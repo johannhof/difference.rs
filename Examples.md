@@ -4,18 +4,18 @@ These examples use the official term library to format output.
 
 ## Line-by-line (Git Style)
 
-![](https://raw.githubusercontent.com/johannhof/difference.rs/master/assets/git-style.png)
+[examples/line-by-line.rs](examples/line-by-line.rs)
 
-[](examples/line-by-line.rs)
+![line-by-line.rs](https://raw.githubusercontent.com/johannhof/difference.rs/master/assets/git-style.png)
 
 ## Underline words (GitHub Style)
 
-![](https://raw.githubusercontent.com/johannhof/difference.rs/master/assets/word-underline.png)
+[examples/underline-words.rs](examples/underline-words.rs)
 
-[](examples/underline-words.rs)
+![underline-words.rs](https://raw.githubusercontent.com/johannhof/difference.rs/master/assets/word-underline.png)
 
 ## GitHub Style (Multiline)
 
-![](https://raw.githubusercontent.com/johannhof/difference.rs/master/assets/github-style.png)
+[examples/github-style.rs](examples/github-style.rs)
 
-[](examples/github-style.rs)
+![github-style.rs](https://raw.githubusercontent.com/johannhof/difference.rs/master/assets/github-style.png)
