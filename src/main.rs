@@ -1,5 +1,6 @@
 #![deny(warnings)]
 
+#[cfg(feature = "bin")]
 extern crate difference;
 #[cfg(feature = "bin")]
 extern crate getopts;
