@@ -50,21 +50,8 @@ impl<'a> Check<'a> {
     fn check(&self) -> TestResult {
         let split = &self.changeset.split;
 
-        let mut old = self.old.trim_left_matches(split);
-        let mut new = self.new.trim_left_matches(split);
-
-        macro_rules! expect {
-            ($ident:ident, $pattern:expr, $diff:expr, $split:expr) => {
-                if !$ident.starts_with($pattern) {
-                    return TestResult::error(format!("`{:?}` does not match `{}` at {:?} for {}",
-                                                      $diff,
-                                                      stringify!($ident),
-                                                      $ident,
-                                                      self));
-                }
-                $ident = &$ident[$pattern.len()..].trim_left_matches($split);
-            }
-        }
+        let mut old: Vec<&str> = Vec::new();
+        let mut new: Vec<&str> = Vec::new();
 
         for d in &self.changeset.diffs {
             if DEBUG {
@@ -73,31 +60,30 @@ impl<'a> Check<'a> {
 
             match *d {
                 Difference::Same(ref x) => {
-                    expect!(old, x, d, split);
-                    expect!(new, x, d, split);
+                    old.push(x);
+                    new.push(x);
                 }
                 Difference::Add(ref x) => {
-                    expect!(new, x, d, split);
+                    new.push(x);
                 }
                 Difference::Rem(ref x) => {
-                    expect!(old, x, d, split);
+                    old.push(x);
                 }
             }
         }
-        if !old.is_empty() {
-            return TestResult::error(format!(
-                "expected end of string in `old` at {:?} for {}",
-                old,
-                self
-            ));
+        let got_old = old.join(split);
+        let got_new = new.join(split);
+        if got_old != self.old {
+            return TestResult::error(format!("Diff output implies old=`{:?}`, not `{:?}` in {}",
+                        got_old, self.old, self,
+                ));
         }
-        if !new.is_empty() {
-            return TestResult::error(format!(
-                "expected end of string in `new` at {:?} for {}",
-                new,
-                self
-            ));
+        if got_new != self.new {
+            return TestResult::error(format!("Diff output implies new=`{:?}`, not `{:?}` in {}",
+                        got_new, self.new, self,
+                ));
         }
+
         TestResult::passed()
     }
 }
