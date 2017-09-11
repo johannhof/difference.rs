@@ -100,6 +100,7 @@ fn issue_19() {
 }
 
 #[test]
+#[allow(needless_pass_by_value)]
 fn fuzzy() {
     fn prop(old: Vec<usize>, new: Vec<usize>, words: Vec<char>) -> TestResult {
         if words.is_empty() {
@@ -126,6 +127,6 @@ fn fuzzy() {
 
     QuickCheck::new()
         .tests(100) // max successful tests
-        .max_tests(10000) // max attempts
+        .max_tests(10_000) // max attempts
         .quickcheck(prop as fn(Vec<usize>, Vec<usize>, Vec<char>) -> TestResult);
 }
