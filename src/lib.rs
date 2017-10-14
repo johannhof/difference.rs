@@ -239,6 +239,47 @@ fn test_diff_brief() {
 }
 
 #[test]
+fn test_diff_smaller_line_count_on_left() {
+    let text1 = "Hello\nworld";
+    let text2 = "Ola\nmundo\nHow is it\ngoing?";
+
+    let changeset = Changeset::new(text1, text2, "\n");
+
+    assert_eq!(
+        changeset.diffs,
+        vec![
+            Difference::Rem("Hello".to_string()),
+            Difference::Add("Ola".to_string()),
+            Difference::Rem("world".to_string()),
+            Difference::Add("mundo".to_string()),
+            Difference::Add("How is it".to_string()),
+            Difference::Add("going?".to_string()),
+        ]
+    );
+}
+
+#[test]
+fn test_diff_smaller_line_count_on_right() {
+    let text1 = "Hello\nworld\nWhat a \nbeautiful\nday!";
+    let text2 = "Ola\nmundo";
+
+    let changeset = Changeset::new(text1, text2, "\n");
+
+    assert_eq!(
+        changeset.diffs,
+        vec![
+            Difference::Rem("Hello".to_string()),
+            Difference::Add("Ola".to_string()),
+            Difference::Rem("world".to_string()),
+            Difference::Add("mundo".to_string()),
+            Difference::Rem("What a ".to_string()),
+            Difference::Rem("beautiful".to_string()),
+            Difference::Rem("day!".to_string()),
+        ]
+    );
+}
+
+#[test]
 #[should_panic]
 fn test_assert_diff_panic() {
     let text1 = "Roses are red, violets are blue,\n\

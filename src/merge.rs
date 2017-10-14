@@ -62,13 +62,19 @@ fn merge_without_common(orig: &str, edit: &str, split: &str) -> Vec<Difference> 
     let mut ret = Vec::new();
 
     while let Option::Some(ref rem) = l_iter.next() {
+        ret.push(Difference::Rem(rem.to_string()));
         match r_iter.next() {
-            Some(ref add) => {
-                ret.push(Difference::Rem(rem.to_string()));
-                ret.push(Difference::Add(add.to_string()));
-            }
+            Some(ref add) => ret.push(Difference::Add(add.to_string())),
             None => break
         }
+    }
+
+    // consume the remaining parts (if any) on left, then right
+    while let Option::Some(ref rem) = l_iter.next() {
+        ret.push(Difference::Rem(rem.to_string()));
+    }
+    while let Option::Some(ref add) = r_iter.next() {
+        ret.push(Difference::Add(add.to_string()));
     }
 
     ret
