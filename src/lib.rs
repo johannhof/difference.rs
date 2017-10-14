@@ -221,6 +221,24 @@ fn test_diff() {
 }
 
 #[test]
+fn test_diff_brief() {
+    let text1 = "Hello\nworld";
+    let text2 = "Ola\nmundo";
+
+    let changeset = Changeset::new(text1, text2, "\n");
+
+    assert_eq!(
+        changeset.diffs,
+        vec![
+            Difference::Rem("Hello".to_string()),
+            Difference::Add("Ola".to_string()),
+            Difference::Rem("world".to_string()),
+            Difference::Add("mundo".to_string()),
+        ]
+    );
+}
+
+#[test]
 #[should_panic]
 fn test_assert_diff_panic() {
     let text1 = "Roses are red, violets are blue,\n\

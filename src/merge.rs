@@ -2,6 +2,10 @@ use Difference;
 
 // merges the changes from two strings, given a common substring
 pub fn merge(orig: &str, edit: &str, common: &str, split: &str) -> Vec<Difference> {
+    if common == "" {
+        return merge_without_common(orig, edit, split)
+    };
+
     let mut ret = Vec::new();
 
     let mut l = orig.split(split).peekable();
@@ -14,9 +18,6 @@ pub fn merge(orig: &str, edit: &str, common: &str, split: &str) -> Vec<Differenc
     }
     if edit == "" {
         r.next();
-    }
-    if common == "" {
-        c.next();
     }
 
     while l.peek().is_some() || r.peek().is_some() {
@@ -47,6 +48,26 @@ pub fn merge(orig: &str, edit: &str, common: &str, split: &str) -> Vec<Differenc
         }
         if !add.is_empty() {
             ret.push(Difference::Add(add.join(split)));
+        }
+    }
+
+    ret
+}
+
+fn merge_without_common(orig: &str, edit: &str, split: &str) -> Vec<Difference> {
+    let l = orig.split(split).collect::<Vec<&str>>();
+    let r = edit.split(split).collect::<Vec<&str>>();
+    let mut l_iter = l.iter();
+    let mut r_iter = r.iter();
+    let mut ret = Vec::new();
+
+    while let Option::Some(ref rem) = l_iter.next() {
+        match r_iter.next() {
+            Some(ref add) => {
+                ret.push(Difference::Rem(rem.to_string()));
+                ret.push(Difference::Add(add.to_string()));
+            }
+            None => break
         }
     }
 
