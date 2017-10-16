@@ -21,8 +21,7 @@ pub fn merge(orig: &str, edit: &str, common: &str, split: &str) -> Vec<Differenc
 
     while l.peek().is_some() || r.peek().is_some() {
         let mut same = Vec::new();
-        while l.peek().is_some() && r.peek().is_some() &&
-            l.peek() == c.peek() && r.peek() == c.peek() {
+        while l.peek().is_some() && l.peek() == c.peek() && r.peek() == c.peek() {
             same.push(l.next().unwrap());
             r.next();
             c.next();
@@ -35,7 +34,6 @@ pub fn merge(orig: &str, edit: &str, common: &str, split: &str) -> Vec<Differenc
         }
 
         let mut rem = Vec::new();
-
         while l.peek().is_some() && l.peek() != c.peek() {
             rem.push(l.next().unwrap());
         }
