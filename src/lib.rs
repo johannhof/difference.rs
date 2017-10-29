@@ -221,6 +221,94 @@ fn test_diff() {
 }
 
 #[test]
+fn test_diff_brief() {
+    let text1 = "Hello\nworld";
+    let text2 = "Ola\nmundo";
+
+    let changeset = Changeset::new(text1, text2, "\n");
+
+    assert_eq!(
+        changeset.diffs,
+        vec![
+            Difference::Rem("Hello\nworld".to_string()),
+            Difference::Add("Ola\nmundo".to_string()),
+        ]
+    );
+}
+
+#[test]
+fn test_diff_smaller_line_count_on_left() {
+    let text1 = "Hello\nworld";
+    let text2 = "Ola\nworld\nHow is it\ngoing?";
+
+    let changeset = Changeset::new(text1, text2, "\n");
+
+    assert_eq!(
+        changeset.diffs,
+        vec![
+            Difference::Rem("Hello".to_string()),
+            Difference::Add("Ola".to_string()),
+            Difference::Same("world".to_string()),
+            Difference::Add("How is it\ngoing?".to_string()),
+        ]
+    );
+}
+
+#[test]
+fn test_diff_smaller_line_count_on_right() {
+    let text1 = "Hello\nworld\nWhat a \nbeautiful\nday!";
+    let text2 = "Ola\nworld";
+
+    let changeset = Changeset::new(text1, text2, "\n");
+
+    assert_eq!(
+        changeset.diffs,
+        vec![
+            Difference::Rem("Hello".to_string()),
+            Difference::Add("Ola".to_string()),
+            Difference::Same("world".to_string()),
+            Difference::Rem("What a \nbeautiful\nday!".to_string()),
+        ]
+    );
+}
+
+#[test]
+fn test_diff_similar_text_with_smaller_line_count_on_right() {
+    let text1 = "Hello\nworld\nWhat a \nbeautiful\nday!";
+    let text2 = "Hello\nwoRLd";
+
+    let changeset = Changeset::new(text1, text2, "\n");
+
+    assert_eq!(
+        changeset.diffs,
+        vec![
+            Difference::Same("Hello".to_string()),
+            Difference::Rem("world\nWhat a \nbeautiful\nday!".to_string()),
+            Difference::Add("woRLd".to_string()),
+        ]
+    );
+}
+
+#[test]
+fn test_diff_similar_text_with_similar_line_count() {
+    let text1 = "Hello\nworld\nWhat a \nbeautiful\nday!";
+    let text2 = "Hello\nwoRLd\nbeautiful";
+
+    let changeset = Changeset::new(text1, text2, "\n");
+
+    assert_eq!(
+        changeset.diffs,
+        vec![
+            Difference::Same("Hello".to_string()),
+            Difference::Rem("world\nWhat a ".to_string()),
+            Difference::Add("woRLd".to_string()),
+            Difference::Same("beautiful".to_string()),
+            Difference::Rem("day!".to_string()),
+        ]
+    );
+}
+
+#[test]
 #[should_panic]
 fn test_assert_diff_panic() {
     let text1 = "Roses are red, violets are blue,\n\
