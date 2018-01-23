@@ -6,7 +6,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! difference = "1.0"
+//! difference = "2.0"
 //! ```
 //!
 //! Now you can use the crate in your code
