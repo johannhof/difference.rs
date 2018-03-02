@@ -1,4 +1,5 @@
 //! Functions to find the difference between two texts (strings).
+//!
 //! Usage
 //! ----------
 //!
@@ -10,6 +11,7 @@
 //! ```
 //!
 //! Now you can use the crate in your code
+//!
 //! ```ignore
 //! extern crate difference;
 //! ```
