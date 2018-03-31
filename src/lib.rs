@@ -71,15 +71,13 @@ pub struct Changeset {
 }
 
 impl Changeset {
-    /// Calculates the edit distance and the changeset for two given strings.
+    /// Calculates Changeset for two given strings.
+    /// 
     /// The first string is assumed to be the "original", the second to be an
     /// edited version of the first. The third parameter specifies how to split
     /// the input strings, leading to a more or less exact comparison.
     ///
     /// Common splits are `""` for char-level, `" "` for word-level and `"\n"` for line-level.
-    ///
-    /// Outputs the edit distance (how much the two strings differ) and a "changeset", that is
-    /// a `Vec` containing `Difference`s.
     ///
     /// # Examples
     ///
