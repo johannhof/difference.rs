@@ -196,10 +196,7 @@ macro_rules! assert_diff {
 /// use difference::print_diff;
 /// print_diff("Diffs are awesome", "Diffs are cool", " ");
 /// ```
-#[deprecated(
-    since = "1.0.0",
-    note = "`Changeset` now implements the `Display` trait instead"
-)]
+#[deprecated(since = "1.0.0", note = "`Changeset` now implements the `Display` trait instead")]
 pub fn print_diff(orig: &str, edit: &str, split: &str) {
     let ch = Changeset::new(orig, edit, split);
     println!("{}", ch);
