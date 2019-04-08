@@ -38,9 +38,9 @@
 #![deny(missing_docs)]
 #![deny(warnings)]
 
+mod display;
 mod lcs;
 mod merge;
-mod display;
 
 use lcs::lcs;
 use merge::merge;
@@ -140,6 +140,7 @@ pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
 
 /// Assert the difference between two strings. Works like diff, but takes
 /// a fourth parameter that is the expected edit distance (e.g. 0 if you want to
+/// takes 4 arguments: (first_string, second_string, split_char, expected_distance)
 /// test for equality).
 ///
 /// To include this macro use:
@@ -147,7 +148,13 @@ pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
 /// ```
 /// #[macro_use(assert_diff)]
 /// extern crate difference;
-/// # fn main() { }
+/// # fn main() {
+///    let lorem_ipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+///    let lorem_ipsum2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+///    let lorem_ipsum_missing_full_stop = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua";
+///    assert_diff!(lorem_ipsum, lorem_ipsum2, " ", 0);
+///    assert_diff!(lorem_ipsum, lorem_ipsum_missing_full_stop, " ", 2);
+/// }
 /// ```
 ///
 /// Remember that edit distance might not be equal to your understanding of difference,
@@ -157,21 +164,23 @@ pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
 /// Will print an error with a colorful diff in case of failure.
 #[macro_export]
 macro_rules! assert_diff {
-    ($orig:expr , $edit:expr, $split: expr, $expected: expr) => ({
+    ($orig:expr , $edit:expr, $split: expr, $expected: expr) => {{
         let orig = $orig;
         let edit = $edit;
 
         let changeset = $crate::Changeset::new(orig, edit, &($split));
         if changeset.distance != $expected {
             println!("{}", changeset);
-            panic!("assertion failed: edit distance between {:?} and {:?} is {} and not {}, see \
-                    diffset above",
-                   orig,
-                   edit,
-                   changeset.distance,
-                   &($expected))
+            panic!(
+                "assertion failed: edit distance between {:?} and {:?} is {} and not {}, see \
+                 diffset above",
+                orig,
+                edit,
+                changeset.distance,
+                &($expected)
+            )
         }
-    })
+    }};
 }
 
 /// **This function is deprecated, `Changeset` now implements the `Display` trait instead**
