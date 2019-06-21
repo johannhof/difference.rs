@@ -27,4 +27,4 @@ getopts = {version = "0.2", optional = true}
 
 [dev-dependencies]
 term = "0.5"
-quickcheck = "0.6"
+quickcheck = "0.8"
