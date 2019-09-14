@@ -68,7 +68,7 @@ mod tests {
                 // 9 => print!("{}", *b as char), // TAB
                 b'\n' => print!("\\n"),
                 b'\r' => print!("\\r"),
-                32...126 => print!("{}", *b as char), // visible ASCII
+                32..=126 => print!("{}", *b as char), // visible ASCII
                 _ => print!(r"\x{:0>2x}", b),
 
             }
