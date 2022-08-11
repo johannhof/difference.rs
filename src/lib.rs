@@ -38,9 +38,9 @@
 #![deny(missing_docs)]
 #![deny(warnings)]
 
+mod display;
 mod lcs;
 mod merge;
-mod display;
 
 use lcs::lcs;
 use merge::merge;
@@ -48,7 +48,7 @@ use merge::merge;
 /// Defines the contents of a changeset
 /// Changesets will be delivered in order of appearance in the original string
 /// Sequences of the same kind will be grouped into one Difference
-#[derive(PartialEq, Debug)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub enum Difference {
     /// Sequences that are the same
     Same(String),
@@ -59,6 +59,7 @@ pub enum Difference {
 }
 
 /// The information about a full changeset
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Changeset {
     /// An ordered vector of `Difference` objects, coresponding
     /// to the differences within the text
@@ -157,21 +158,23 @@ pub fn diff(orig: &str, edit: &str, split: &str) -> (i32, Vec<Difference>) {
 /// Will print an error with a colorful diff in case of failure.
 #[macro_export]
 macro_rules! assert_diff {
-    ($orig:expr , $edit:expr, $split: expr, $expected: expr) => ({
+    ($orig:expr , $edit:expr, $split: expr, $expected: expr) => {{
         let orig = $orig;
         let edit = $edit;
 
         let changeset = $crate::Changeset::new(orig, edit, &($split));
         if changeset.distance != $expected {
             println!("{}", changeset);
-            panic!("assertion failed: edit distance between {:?} and {:?} is {} and not {}, see \
+            panic!(
+                "assertion failed: edit distance between {:?} and {:?} is {} and not {}, see \
                     diffset above",
-                   orig,
-                   edit,
-                   changeset.distance,
-                   &($expected))
+                orig,
+                edit,
+                changeset.distance,
+                &($expected)
+            )
         }
-    })
+    }};
 }
 
 /// **This function is deprecated, `Changeset` now implements the `Display` trait instead**
@@ -187,7 +190,10 @@ macro_rules! assert_diff {
 /// use difference::print_diff;
 /// print_diff("Diffs are awesome", "Diffs are cool", " ");
 /// ```
-#[deprecated(since = "1.0.0", note = "`Changeset` now implements the `Display` trait instead")]
+#[deprecated(
+    since = "1.0.0",
+    note = "`Changeset` now implements the `Display` trait instead"
+)]
 pub fn print_diff(orig: &str, edit: &str, split: &str) {
     let ch = Changeset::new(orig, edit, split);
     println!("{}", ch);

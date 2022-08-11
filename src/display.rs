@@ -1,5 +1,3 @@
-
-
 use super::{Changeset, Difference};
 use std::fmt;
 
@@ -7,15 +5,9 @@ impl fmt::Display for Changeset {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for d in &self.diffs {
             match *d {
-                Difference::Same(ref x) => {
-                    try!(write!(f, "{}{}", x, self.split));
-                }
-                Difference::Add(ref x) => {
-                    try!(write!(f, "\x1b[92m{}\x1b[0m{}", x, self.split));
-                }
-                Difference::Rem(ref x) => {
-                    try!(write!(f, "\x1b[91m{}\x1b[0m{}", x, self.split));
-                }
+                Difference::Same(ref x) => write!(f, "{}{}", x, self.split)?,
+                Difference::Add(ref x) => write!(f, "\x1b[92m{}\x1b[0m{}", x, self.split)?,
+                Difference::Rem(ref x) => write!(f, "\x1b[91m{}\x1b[0m{}", x, self.split)?,
             }
         }
         Ok(())
@@ -47,7 +39,7 @@ mod tests {
         }
         println!("Repr Result:");
         repr_bytes(result);
-        println!("");
+        println!();
         println!("--Result Repr DONE");
 
         println!("Debug Expected:");
@@ -56,7 +48,7 @@ mod tests {
         }
         println!("Repr Expected:");
         repr_bytes(expected);
-        println!("");
+        println!();
         println!("--Expected Repr DONE");
     }
 
@@ -68,9 +60,8 @@ mod tests {
                 // 9 => print!("{}", *b as char), // TAB
                 b'\n' => print!("\\n"),
                 b'\r' => print!("\\r"),
-                32...126 => print!("{}", *b as char), // visible ASCII
+                32..=126 => print!("{}", *b as char), // visible ASCII
                 _ => print!(r"\x{:0>2x}", b),
-
             }
         }
     }
@@ -95,6 +86,5 @@ mod tests {
         write!(result, "{}", ch).unwrap();
         debug_bytes(&result, expected);
         assert_eq!(result, vb(expected));
-
     }
 }

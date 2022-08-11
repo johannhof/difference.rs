@@ -9,13 +9,13 @@ pub fn merge(orig: &str, edit: &str, common: &str, split: &str) -> Vec<Differenc
     let mut c = common.split(split).peekable();
 
     // Turn empty strings into [], not [""]
-    if orig == "" {
+    if orig.is_empty() {
         l.next();
     }
-    if edit == "" {
+    if edit.is_empty() {
         r.next();
     }
-    if common == "" {
+    if common.is_empty() {
         c.next();
     }
 
@@ -28,7 +28,7 @@ pub fn merge(orig: &str, edit: &str, common: &str, split: &str) -> Vec<Differenc
         }
         if !same.is_empty() {
             let joined = same.join(split);
-            if split != "" || joined != "" {
+            if !split.is_empty() || !joined.is_empty() {
                 ret.push(Difference::Same(joined));
             }
         }
@@ -52,7 +52,6 @@ pub fn merge(orig: &str, edit: &str, common: &str, split: &str) -> Vec<Differenc
 
     ret
 }
-
 
 #[test]
 fn test_merge() {

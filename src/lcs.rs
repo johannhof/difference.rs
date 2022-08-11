@@ -5,11 +5,11 @@ use std::cmp::max;
 // logic won't handle those properly.
 fn strsplit<'a>(s: &'a str, split: &str) -> Vec<&'a str> {
     let mut si = s.split(split);
-    if split == "" {
+    if split.is_empty() {
         si.next();
     }
     let mut v: Vec<&str> = si.collect();
-    if split == "" {
+    if split.is_empty() {
         v.pop();
     }
     v
@@ -21,8 +21,7 @@ fn strsplit<'a>(s: &'a str, split: &str) -> Vec<&'a str> {
 //
 // This algorithm is based on
 // https://en.wikipedia.org/wiki/Longest_common_subsequence_problem#Code_for_the_dynamic_programming_solution
-#[allow(non_snake_case)]
-#[cfg_attr(feature = "cargo-clippy", allow(many_single_char_names))]
+#[allow(non_snake_case, clippy::many_single_char_names)]
 pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
     // make list by custom splits
     let a = strsplit(orig, split);
@@ -31,8 +30,7 @@ pub fn lcs(orig: &str, edit: &str, split: &str) -> (i32, String) {
     let N = a.len();
     let M = b.len();
 
-    let mut idx: Vec<usize> = Vec::with_capacity(N * M);
-    idx.resize(N * M, 0);
+    let mut idx: Vec<usize> = vec![0; N * M];
 
     for i in 0..N {
         for j in 0..M {
