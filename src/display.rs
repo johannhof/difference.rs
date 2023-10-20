@@ -8,13 +8,13 @@ impl fmt::Display for Changeset {
         for d in &self.diffs {
             match *d {
                 Difference::Same(ref x) => {
-                    try!(write!(f, "{}{}", x, self.split));
+                    write!(f, "{}{}", x, self.split)?;
                 }
                 Difference::Add(ref x) => {
-                    try!(write!(f, "\x1b[92m{}\x1b[0m{}", x, self.split));
+                    write!(f, "\x1b[92m{}\x1b[0m{}", x, self.split)?;
                 }
                 Difference::Rem(ref x) => {
-                    try!(write!(f, "\x1b[91m{}\x1b[0m{}", x, self.split));
+                    write!(f, "\x1b[91m{}\x1b[0m{}", x, self.split)?;
                 }
             }
         }
@@ -68,7 +68,7 @@ mod tests {
                 // 9 => print!("{}", *b as char), // TAB
                 b'\n' => print!("\\n"),
                 b'\r' => print!("\\r"),
-                32...126 => print!("{}", *b as char), // visible ASCII
+                32..=126 => print!("{}", *b as char), // visible ASCII
                 _ => print!(r"\x{:0>2x}", b),
 
             }
